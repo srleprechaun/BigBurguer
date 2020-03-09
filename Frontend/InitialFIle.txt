@@ -1,3 +1,0 @@
-This folder will contain a React Project
-
-"test"
