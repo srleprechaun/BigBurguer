@@ -1,0 +1,80 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Presentation", "1 - Presentation", "{E2214BDE-FE08-488C-80FD-A79875E48D67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBurguer.Api", "BigBurguer.Api\BigBurguer.Api.csproj", "{76309B44-2821-4614-8349-1E1C1B5155D1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Domain", "2 - Domain", "{0C52FE7E-9F92-4E50-8BD9-30AA98B60CA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Infrastructure", "3 - Infrastructure", "{13830CC5-2ADC-44D3-B383-7676D816FE24}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - CrossCurtting", "4 - CrossCurtting", "{7F50351F-8920-4977-AA08-F68A7BD6CEFF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Test", "5 - Test", "{7FB539B3-31B7-4091-835A-52963B590B55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBurguer.Domain", "BigBurguer.Domain\BigBurguer.Domain.csproj", "{E9205CAE-A069-4536-A5E9-AEE69677CC34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBurguer.Infrastructure.Data.DataBase", "BigBurguer.Infrastructure.Data.DataBase\BigBurguer.Infrastructure.Data.DataBase.csproj", "{83C6B355-C196-4EF4-B94A-0DEA8DAE9A5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBurguer.Infrastructure.Data.Query", "BigBurguer.Infrastructure.Data.Query\BigBurguer.Infrastructure.Data.Query.csproj", "{261534A4-DD40-4921-9DC0-A77BB080DB2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBurguer.CrossCutting.Configuration", "BigBurguer.CrossCutting.Configuration\BigBurguer.CrossCutting.Configuration.csproj", "{EDCA03A4-F2DA-437D-9D8E-4FCC6BDABDE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBurguer.Domain.Tests", "BigBurguer.Domain.Tests\BigBurguer.Domain.Tests.csproj", "{F129F298-72A0-42E3-BA21-2F70B5B03C5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBurguer.Query.Tests", "BigBurguer.Query.Tests\BigBurguer.Query.Tests.csproj", "{B2448EC5-7612-4BCB-A3B7-43F56DC43D29}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76309B44-2821-4614-8349-1E1C1B5155D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76309B44-2821-4614-8349-1E1C1B5155D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76309B44-2821-4614-8349-1E1C1B5155D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76309B44-2821-4614-8349-1E1C1B5155D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9205CAE-A069-4536-A5E9-AEE69677CC34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9205CAE-A069-4536-A5E9-AEE69677CC34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9205CAE-A069-4536-A5E9-AEE69677CC34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9205CAE-A069-4536-A5E9-AEE69677CC34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83C6B355-C196-4EF4-B94A-0DEA8DAE9A5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83C6B355-C196-4EF4-B94A-0DEA8DAE9A5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83C6B355-C196-4EF4-B94A-0DEA8DAE9A5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83C6B355-C196-4EF4-B94A-0DEA8DAE9A5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{261534A4-DD40-4921-9DC0-A77BB080DB2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{261534A4-DD40-4921-9DC0-A77BB080DB2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{261534A4-DD40-4921-9DC0-A77BB080DB2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{261534A4-DD40-4921-9DC0-A77BB080DB2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDCA03A4-F2DA-437D-9D8E-4FCC6BDABDE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDCA03A4-F2DA-437D-9D8E-4FCC6BDABDE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDCA03A4-F2DA-437D-9D8E-4FCC6BDABDE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDCA03A4-F2DA-437D-9D8E-4FCC6BDABDE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F129F298-72A0-42E3-BA21-2F70B5B03C5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F129F298-72A0-42E3-BA21-2F70B5B03C5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F129F298-72A0-42E3-BA21-2F70B5B03C5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F129F298-72A0-42E3-BA21-2F70B5B03C5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2448EC5-7612-4BCB-A3B7-43F56DC43D29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2448EC5-7612-4BCB-A3B7-43F56DC43D29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2448EC5-7612-4BCB-A3B7-43F56DC43D29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2448EC5-7612-4BCB-A3B7-43F56DC43D29}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{76309B44-2821-4614-8349-1E1C1B5155D1} = {E2214BDE-FE08-488C-80FD-A79875E48D67}
+		{E9205CAE-A069-4536-A5E9-AEE69677CC34} = {0C52FE7E-9F92-4E50-8BD9-30AA98B60CA5}
+		{83C6B355-C196-4EF4-B94A-0DEA8DAE9A5E} = {13830CC5-2ADC-44D3-B383-7676D816FE24}
+		{261534A4-DD40-4921-9DC0-A77BB080DB2A} = {13830CC5-2ADC-44D3-B383-7676D816FE24}
+		{EDCA03A4-F2DA-437D-9D8E-4FCC6BDABDE0} = {7F50351F-8920-4977-AA08-F68A7BD6CEFF}
+		{F129F298-72A0-42E3-BA21-2F70B5B03C5B} = {7FB539B3-31B7-4091-835A-52963B590B55}
+		{B2448EC5-7612-4BCB-A3B7-43F56DC43D29} = {7FB539B3-31B7-4091-835A-52963B590B55}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C0D8261-0EA8-4FD7-9884-B4EB780E2D4E}
+	EndGlobalSection
+EndGlobal
