@@ -6,9 +6,6 @@ pool:
 
 steps:
 
-- task: CmdLine@2
-  inputs:
-    script: 'cd Front-end/app-ux'
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
@@ -16,5 +13,4 @@ steps:
 
 - script: |
     npm install
-    npm run build
-  displayName: 'npm install and build'
+  displayName: 'npm install'
