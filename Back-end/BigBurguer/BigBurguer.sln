@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigBurguer.Api", "BigBurgue
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{074D422F-4776-4D72-8129-B81E0872E419}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBurguer.Test", "test\BigBurguer.Test\BigBurguer.Test.csproj", "{29B57EA4-46B9-4806-9271-3BB8AEE522E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigBurguer.Test", "test\BigBurguer.Test\BigBurguer.Test.csproj", "{29B57EA4-46B9-4806-9271-3BB8AEE522E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "..\..\..\..\..\Users\lucas.bezerra\Desktop\Test\WebApplication1\WebApplication1.csproj", "{892CC83B-9ADB-492B-BAF7-D92D351D034A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{29B57EA4-46B9-4806-9271-3BB8AEE522E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29B57EA4-46B9-4806-9271-3BB8AEE522E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29B57EA4-46B9-4806-9271-3BB8AEE522E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{892CC83B-9ADB-492B-BAF7-D92D351D034A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{892CC83B-9ADB-492B-BAF7-D92D351D034A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{892CC83B-9ADB-492B-BAF7-D92D351D034A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{892CC83B-9ADB-492B-BAF7-D92D351D034A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
