@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigBurguer.Api", "BigBurgue
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{074D422F-4776-4D72-8129-B81E0872E419}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBurguer.Test", "test\BigBurguer.Test\BigBurguer.Test.csproj", "{29B57EA4-46B9-4806-9271-3BB8AEE522E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,9 +19,16 @@ Global
 		{76309B44-2821-4614-8349-1E1C1B5155D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76309B44-2821-4614-8349-1E1C1B5155D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76309B44-2821-4614-8349-1E1C1B5155D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29B57EA4-46B9-4806-9271-3BB8AEE522E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29B57EA4-46B9-4806-9271-3BB8AEE522E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29B57EA4-46B9-4806-9271-3BB8AEE522E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29B57EA4-46B9-4806-9271-3BB8AEE522E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{29B57EA4-46B9-4806-9271-3BB8AEE522E7} = {074D422F-4776-4D72-8129-B81E0872E419}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8C0D8261-0EA8-4FD7-9884-B4EB780E2D4E}
