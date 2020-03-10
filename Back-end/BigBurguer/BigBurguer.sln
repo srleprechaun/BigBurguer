@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{074D422F-4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigBurguer.Test", "test\BigBurguer.Test\BigBurguer.Test.csproj", "{29B57EA4-46B9-4806-9271-3BB8AEE522E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "..\..\..\..\..\Users\lucas.bezerra\Desktop\Test\WebApplication1\WebApplication1.csproj", "{892CC83B-9ADB-492B-BAF7-D92D351D034A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
