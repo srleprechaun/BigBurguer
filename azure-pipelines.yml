@@ -16,6 +16,5 @@ steps:
   displayName: 'npm install'
 
 - script: |
-    npm run build
+    npm run deploy
   displayName: 'npm build'
-  workingDirectory: '$(Build.SourcesDirectory)'
