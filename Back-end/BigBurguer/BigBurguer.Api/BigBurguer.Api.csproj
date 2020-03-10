@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\" />
+    <Folder Include="Infrastructure\Models\" />
+    <Folder Include="Views\" />
     <Folder Include="Repository\" />
   </ItemGroup>
 
