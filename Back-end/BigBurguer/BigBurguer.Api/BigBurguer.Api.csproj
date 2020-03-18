@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
-    <Folder Include="Infrastructure\Models\" />
+    <Compile Remove="Migrations\20200317200913_Initial_Migration.cs" />
+    <Compile Remove="Migrations\20200317200913_Initial_Migration.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Repository\" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
