@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BigBurguer.Api.Migrations
 {
-    public partial class Initial_Migration : Migration
+    public partial class Initial_Create_Tables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,6 +36,22 @@ namespace BigBurguer.Api.Migrations
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BirthDate = table.Column<DateTime>(nullable: false),
+                    Password = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Cpf = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -44,6 +61,9 @@ namespace BigBurguer.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }
