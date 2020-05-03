@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BigBurguer.Api.Infrastructure.Models
 {
@@ -9,8 +7,11 @@ namespace BigBurguer.Api.Infrastructure.Models
     {
         public int Id { get; set; }
         public DateTime BirthDate { get; set; }
+        [Column(TypeName = "varchar(50)")]
         public string Password { get; set; }
+        [Column(TypeName = "varchar(100)")]
         public string  Name { get; set; }
+        [Column(TypeName = "varchar(15)")]
         public string Cpf { get; set; }
     }
 }
