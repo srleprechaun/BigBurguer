@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BigBurguer.Api.Infrastructure.Models
 {
@@ -9,8 +7,11 @@ namespace BigBurguer.Api.Infrastructure.Models
     {
         public int Id { get; set; }
         public string ImageUrl { get; set; }
+        [Column(TypeName = "varchar(100)")]
         public string Name { get; set; }
-        public string Ingredients { get; set; }
+        [Column(TypeName = "numeric(10,2)")]
         public decimal Price { get; set; }
+
+        public ICollection<ProductIngredient> ProductIngredient { get; set; }
     }
 }

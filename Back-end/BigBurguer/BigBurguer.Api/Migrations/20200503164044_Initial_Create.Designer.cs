@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BigBurguer.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200401002017_Initial_Create_Tables")]
-    partial class Initial_Create_Tables
+    [Migration("20200503164044_Initial_Create")]
+    partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,10 +28,13 @@ namespace BigBurguer.Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Ingredients")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("stockQuantity")
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("StockQuantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -53,14 +56,36 @@ namespace BigBurguer.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric(10,2)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.ProductIngredient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IngredientId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductIngredient");
                 });
 
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.User", b =>
@@ -74,17 +99,32 @@ namespace BigBurguer.Api.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Cpf")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(15)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.ProductIngredient", b =>
+                {
+                    b.HasOne("BigBurguer.Api.Infrastructure.Models.Ingredient", "Ingredient")
+                        .WithMany("ProductIngredient")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BigBurguer.Api.Infrastructure.Models.Product", "Product")
+                        .WithMany("ProductIngredient")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
