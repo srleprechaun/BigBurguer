@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import logo from '../../assets/img/logos/logo.png'
+import logo from '../../assets/img/logos/logo.png';
+import { AsyncStorage } from 'AsyncStorage';
 import './style.css'
 
 import $ from 'jquery';
-import Popper from 'popper.js';
+
+const PRODUCTS_CART_KEY = "PRODUCTS_CART_KEY";
 
 export default class Header extends Component {
   state = {
