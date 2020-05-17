@@ -14,7 +14,7 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
-    this.loadProducts()
+    this.loadProducts();
   }
 
   loadProducts = async () => {
@@ -114,7 +114,7 @@ export default class Home extends Component {
 
     return (
       <main role="main">
-        <img id="cart" src={cartLogo} alt="Carrinho"></img>
+        <a href="/carrinho"><img id="cart" src={cartLogo} alt="Carrinho"></img></a>
         <section className="jumbotron text-center" style={{paddingTop: "30px", paddingBottom: "10px", marginBottom: "0px"}}>
           <div className="container">
           <h1 className="jumbotron-heading">Big Burguer</h1>

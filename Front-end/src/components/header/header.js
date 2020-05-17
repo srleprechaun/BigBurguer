@@ -51,7 +51,7 @@ export default class Header extends Component {
                 <span className="navbar-toggler-icon"></span>
               </button>
               <div className={menuClass}>
-                <a href="" className="dropdown-item">Carrinho</a>
+                <a href="/carrinho" className="dropdown-item">Carrinho</a>
                 <a href="" className="dropdown-item">Minhas compras</a>
                 <a href="/produto" className="dropdown-item">Cadastrar Produto</a>
                 <a href="" className="dropdown-item">Meus dados</a>
