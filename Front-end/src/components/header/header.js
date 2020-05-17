@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import logo from '../../assets/img/logos/logo.png';
-import { AsyncStorage } from 'AsyncStorage';
 import './style.css'
 
 import $ from 'jquery';
-
-const PRODUCTS_CART_KEY = "PRODUCTS_CART_KEY";
 
 export default class Header extends Component {
   state = {
@@ -45,7 +42,7 @@ export default class Header extends Component {
         <a href="" id="scroll" style={{display: "none"}}><span></span></a>
         <div className="navbar navbar-dark bg-light shadow-sm">
           <div className="container d-flex justify-content-between">
-            <a className="navbar-brand d-flex align-items-center">
+            <a className="navbar-brand d-flex align-items-center" href="/">
               <img src={logo} alt="Logotipo Big Burguer" width="100" height="59.8"></img>
             </a>
             <div className="btn-group" onClick={this.toggleOpen}>
@@ -56,6 +53,7 @@ export default class Header extends Component {
               <div className={menuClass}>
                 <a href="" className="dropdown-item">Carrinho</a>
                 <a href="" className="dropdown-item">Minhas compras</a>
+                <a href="/produto" className="dropdown-item">Cadastrar Produto</a>
                 <a href="" className="dropdown-item">Meus dados</a>
                 <a href="" className="dropdown-item">Sair</a>
                 <a href="" className="dropdown-item">Entrar</a>
