@@ -23,7 +23,7 @@ namespace BigBurguer.Api.Controllers
         {
              try
             {
-                var result = await _context.Product.ToListAsync();
+                var result = await _context.Products.ToListAsync();
                 return Ok(result);
             }
             catch (System.Exception e)

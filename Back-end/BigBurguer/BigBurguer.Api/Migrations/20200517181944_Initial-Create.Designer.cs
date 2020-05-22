@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BigBurguer.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200503164709_Initial_Create")]
-    partial class Initial_Create
+    [Migration("20200517181944_Initial-Create")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,7 +36,7 @@ namespace BigBurguer.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredient");
+                    b.ToTable("Ingredients");
                 });
 
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.Product", b =>
@@ -57,7 +57,7 @@ namespace BigBurguer.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.ProductIngredient", b =>
@@ -68,14 +68,11 @@ namespace BigBurguer.Api.Migrations
                     b.Property<int>("IngredientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductId", "IngredientId");
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("ProductIngredient");
+                    b.ToTable("ProductIngredients");
                 });
 
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.User", b =>
@@ -99,7 +96,7 @@ namespace BigBurguer.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.ProductIngredient", b =>

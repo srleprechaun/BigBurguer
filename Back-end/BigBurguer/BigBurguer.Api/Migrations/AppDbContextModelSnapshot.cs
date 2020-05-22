@@ -34,7 +34,7 @@ namespace BigBurguer.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredient");
+                    b.ToTable("Ingredients");
                 });
 
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.Product", b =>
@@ -55,7 +55,7 @@ namespace BigBurguer.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.ProductIngredient", b =>
@@ -66,14 +66,11 @@ namespace BigBurguer.Api.Migrations
                     b.Property<int>("IngredientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductId", "IngredientId");
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("ProductIngredient");
+                    b.ToTable("ProductIngredients");
                 });
 
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.User", b =>
@@ -97,7 +94,7 @@ namespace BigBurguer.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.ProductIngredient", b =>
