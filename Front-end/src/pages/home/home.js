@@ -14,7 +14,7 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
-    this.loadProducts()
+    this.loadProducts();
   }
 
   loadProducts = async () => {
@@ -25,10 +25,10 @@ export default class Home extends Component {
         products.push({ id: p.id, imageUrl: p.imageUrl, name: p.name, ingredients: p.ingredients, price: p.price, type: p.type, selected: 0 });
       });
       this.setState({ products: products });
-      // this.selectQuantidadeNoCarrinho();
+      this.selectCartProducts();
   };
 
-  async adicionar(id) {
+  async addToCart(id) {
     let products = this.state.products; 
     let product = products.find(x => x.id === id);
     if (product){
@@ -54,7 +54,7 @@ export default class Home extends Component {
     }
   }
 
-  async remover(id) {
+  async removeFromCart(id) {
     let products = this.state.products; 
     let product = products.find(x => x.id === id);
     if (product.selected > 0){
@@ -72,6 +72,18 @@ export default class Home extends Component {
         this._storeData(PRODUCTS_CART_KEY, cartProducts);
         this.setState({ products: products });
       }
+    }
+  }
+
+  async selectCartProducts() {
+    let cartProducts = await this._retrieveData(PRODUCTS_CART_KEY);
+    if (cartProducts) {
+      let products = this.state.products;
+      cartProducts.forEach(p => {
+        let product = products.find(x => x.id === p.id);
+        product.selected = p.selected;
+      });
+      this.setState({ products: products });
     }
   }
 
@@ -102,7 +114,7 @@ export default class Home extends Component {
 
     return (
       <main role="main">
-        <img id="cart" src={cartLogo} alt="Carrinho"></img>
+        <a href="/carrinho"><img id="cart" src={cartLogo} alt="Carrinho"></img></a>
         <section className="jumbotron text-center" style={{paddingTop: "30px", paddingBottom: "10px", marginBottom: "0px"}}>
           <div className="container">
           <h1 className="jumbotron-heading">Big Burguer</h1>
@@ -122,10 +134,22 @@ export default class Home extends Component {
                     <div className="card-body">
                       <p className="card-text">{product.name}</p>
                       <p className="card-text">R$ {product.price}</p>
+                      <p>
+                      <button className="btn btn-primary" type="button" data-toggle="collapse" data-target={"#collapseExample" + product.id} aria-expanded="false" aria-controls="collapseExample">
+                        Ingredientes
+                      </button>
+                    </p>
+                    <div className="collapse" id={"collapseExample" + product.id}>
+                      <ul>
+                        {product.ingredients.map(i => (
+                          <li key={i}>{i}</li>
+                        ))}
+                      </ul>
+                    </div>
                       <div className="btn-group">
-                        <button type="button" className="btn btn-sm btn-outline-primary rounded-pill" onClick={(e) => this.remover(product.id)}>-</button>
+                        <button type="button" className="btn btn-sm btn-outline-primary rounded-pill" onClick={(e) => this.removeFromCart(product.id)}>-</button>
                         <span className="pr-1 pl-1 pt-1">{product.selected}</span>
-                        <button type="button" className="btn btn-sm btn-outline-primary rounded-pill" onClick={(e) => this.adicionar(product.id)}>+</button>
+                        <button type="button" className="btn btn-sm btn-outline-primary rounded-pill" onClick={(e) => this.addToCart(product.id)}>+</button>
                       </div>
                     </div>
                   </div>
@@ -144,9 +168,9 @@ export default class Home extends Component {
                       <p className="card-text">{product.name}</p>
                       <p className="card-text">R$ {product.price}</p>
                       <div className="btn-group">
-                        <button type="button" className="btn btn-sm btn-outline-primary rounded-pill" onClick={(e) => this.remover(product.id)}>-</button>
+                        <button type="button" className="btn btn-sm btn-outline-primary rounded-pill" onClick={(e) => this.removeFromCart(product.id)}>-</button>
                         <span className="pr-1 pl-1 pt-1">{product.selected}</span>
-                        <button type="button" className="btn btn-sm btn-outline-primary rounded-pill" onClick={(e) => this.adicionar(product.id)}>+</button>
+                        <button type="button" className="btn btn-sm btn-outline-primary rounded-pill" onClick={(e) => this.addToCart(product.id)}>+</button>
                       </div>
                     </div>
                   </div>
