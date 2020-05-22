@@ -10,6 +10,6 @@ namespace BigBurguer.Api.Infrastructure.Models
         [Column(TypeName = "varchar(100)")]
         public string Name { get; set; }
 
-        public ICollection<ProductIngredient> ProductIngredient { get; set; }
+        public virtual ICollection<ProductIngredient> ProductIngredient { get; set; }
     }
 }
