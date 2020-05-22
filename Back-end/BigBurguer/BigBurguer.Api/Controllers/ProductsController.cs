@@ -3,6 +3,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BigBurguer.Api.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.Net;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.CodeAnalysis;
+using System.Text.Json.Serialization;
+using System;
+using Microsoft.AspNetCore.Http;
 
 namespace BigBurguer.Api.Controllers
 {
@@ -36,6 +43,27 @@ namespace BigBurguer.Api.Controllers
         // GET: api/Products/<id:int>
         // PUT: api/Products/<id:int>
         // POST: api/Products
+        [HttpPost]
+        public void Post(Product post)
+        {
+            try
+            {
+                Product product = new Product
+                {
+                    ImageUrl = post.ImageUrl,
+                    Name = post.Name,
+                    Price = post.Price
+                };
+
+                _context.Product.Add(product);
+                _context.SaveChanges();
+            }
+            catch (System.Exception e)
+            {
+                throw e;
+            }
+        }
+
         // DELETE: api/Products/<id:int>
     }
 }
