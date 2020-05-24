@@ -55,7 +55,7 @@ namespace BigBurguer.Api.Controllers
                     Price = post.Price
                 };
 
-                _context.Product.Add(product);
+                _context.Products.Add(product);
                 _context.SaveChanges();
             }
             catch (System.Exception e)
