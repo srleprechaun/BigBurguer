@@ -1,15 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using BigBurguer.Api.Infrastructure.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using System.Net;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.CodeAnalysis;
-using System.Text.Json.Serialization;
-using System;
-using Microsoft.AspNetCore.Http;
+using BigBurguer.Api.Views;
+using Microsoft.AspNetCore.Mvc;
+using BigBurguer.Api.Services;
+
 
 namespace BigBurguer.Api.Controllers
 {
@@ -17,20 +11,18 @@ namespace BigBurguer.Api.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public ProductsController(AppDbContext context)
+        private readonly IProductService _productService;
+        public ProductsController(IProductService productService)
         {
-            _context = context;
+            _productService = productService;
         }
-
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAll()
+        public ActionResult<IEnumerable<Product>> GetAll()
         {
              try
             {
-                var result = await _context.Products.ToListAsync();
+                var result = _productService.GetAll();
                 return Ok(result);
             }
             catch (System.Exception e)
@@ -39,31 +31,57 @@ namespace BigBurguer.Api.Controllers
 
             }
         }
+        // POST: api/Products
+        
+        [HttpPost]
+        public IActionResult Post([FromBody]ProductViewModel productModel)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            var result = _productService.CreateProductAsync(productModel);
+            if (result == null)
+            {
+                return BadRequest(ModelState);
+            }
+            return Created($"/api/[controller]/{result}", null);
+        }
 
         // GET: api/Products/<id:int>
-        // PUT: api/Products/<id:int>
-        // POST: api/Products
-        [HttpPost]
-        public void Post(Product post)
+        [HttpGet("{id}")]
+        public ActionResult<Product> Get([FromRoute]int id)
         {
-            try
-            {
-                Product product = new Product
-                {
-                    ImageUrl = post.ImageUrl,
-                    Name = post.Name,
-                    Price = post.Price
-                };
+            var result = _productService.GetId(id);
 
-                _context.Products.Add(product);
-                _context.SaveChanges();
-            }
-            catch (System.Exception e)
+            if (result == null)
             {
-                throw e;
+                return BadRequest(ModelState);
             }
+
+            return Ok(result);
+        }
+
+        // PUT: api/Products/<id:int>
+        [HttpPut("{id}")]
+        public ActionResult<Product> Put([FromRoute]int id, [FromBody]ProductViewModel productModel)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            var result = _productService.EditProductAsync(id, productModel);
+            if (result == false)
+            {
+                return BadRequest(ModelState);
+            }
+            return Ok(id);
         }
 
         // DELETE: api/Products/<id:int>
+        [HttpDelete("{id}")]
+        public ActionResult<Product> Delete([FromRoute]int id)
+        {
+            var result = _productService.DeleteProductAsync(id);
+            if (result == false)
+            {
+                return BadRequest();
+            }
+            return Ok(id);
+        }
     }
 }

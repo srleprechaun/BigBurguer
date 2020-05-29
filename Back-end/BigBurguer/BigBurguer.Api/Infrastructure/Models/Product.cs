@@ -11,7 +11,6 @@ namespace BigBurguer.Api.Infrastructure.Models
         public string Name { get; set; }
         [Column(TypeName = "numeric(10,2)")]
         public decimal Price { get; set; }
-
         public ICollection<ProductIngredient> ProductIngredient { get; set; }
     }
 }

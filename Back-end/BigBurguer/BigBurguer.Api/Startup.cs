@@ -44,8 +44,10 @@ namespace BigBurguer.Api
         private static void DependencyInjection(IServiceCollection services)
         {
             services.AddScoped<IIngredientService, IngredientService>();
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddTransient<IValidator<IngredientViewModel>, IngredientValidator>();
+            services.AddTransient<IValidator<ProductViewModel>, ProductValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
