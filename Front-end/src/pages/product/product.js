@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CurrencyInput from 'react-currency-input';
+import Ingredient from './ingredient/ingredient';
 
 export default class Product extends Component {
   state = {
@@ -9,7 +10,8 @@ export default class Product extends Component {
       ingredients: [],
       imageUrl: "",
       type: ""
-    }
+    },
+    isOpen: false
   }
 
   handleChange(event, maskedvalue, floatvalue) {
@@ -37,7 +39,14 @@ export default class Product extends Component {
     event.preventDefault();
   }
 
+  updateIngredients() {
+    console.log("update ingredients");
+  }
+
+  toggleIngredientOpen = () => this.setState({ isOpen: !this.state.isOpen });
+
   render () {
+    
     return (
       <div role="main">
         <section className="jumbotron text-center" style={{paddingTop: "30px", paddingBottom: "10px", marginBottom: "0px"}}>
@@ -68,8 +77,25 @@ export default class Product extends Component {
               </div>
               <div>
                 <label id="lblIngredients">Lista de Ingredientes:</label>
-                <input id="txtIngredients" type="text" className="form-control" onChange={this.handleChange.bind(this)} />
+                <br></br>
+                <input type="checkbox" name="teste" label="Teste" /> Ingrediente 1
+                <br></br>
+                <input type="checkbox" name="teste" label="Teste" /> Ingrediente 2
+                <br></br>
+                <input type="checkbox" name="teste" label="Teste" /> Ingrediente 3
               </div>
+              <p></p>
+              <div className="btn-group" onClick={this.toggleIngredientOpen}>
+                <button className="btn btn-primary" type="button" id="createIngredient" aria-haspopup="true" aria-expanded="false">
+                  Cadastrar Ingrediente
+                </button>
+              </div>
+              {this.state.isOpen &&
+                <div>
+                  <Ingredient updateIngredients={this.updateIngredients}></Ingredient>
+                </div>
+              }
+              <p></p>
               <div>
                 <label id="lblProductUrl">Imagem do Produto:</label>
                 <input id="txtProductUrl" type="text" className="form-control" onChange={this.handleChange.bind(this)} />
