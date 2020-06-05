@@ -26,7 +26,7 @@ namespace BigBurguer.Api.Services
             return _context.Ingredients.Where(i => i.Id == id).FirstOrDefault();
         }
 
-        public async Task<EntityEntry<Ingredient>> CreateIngredientAsync(IngredientViewModel ingredientModel)
+        public EntityEntry<Ingredient> CreateIngredient(IngredientViewModel ingredientModel)
         {
             Ingredient ingredient = new Ingredient()
             {
@@ -34,42 +34,27 @@ namespace BigBurguer.Api.Services
                 StockQuantity = ingredientModel.StockQuantity
             };
 
-            var result = _context.Ingredients.AddAsync(ingredient);
+            var result = _context.Ingredients.Add(ingredient);
 
             if (result != null)
             {
                 _context.SaveChanges();
 
-                if (ingredientModel.ProductId != null)
-                {
-                    var productIngredient = new ProductIngredient()
-                    {
-                        ProductId = ingredientModel.ProductId,
-                        IngredientId = ingredient.Id
-                    };
-
-                    AddProductIngredient(productIngredient);
-                }
-
-                return await result;
+                return result;
             }
             return null;
         }
 
-        private void AddProductIngredient(ProductIngredient productIngredient)
-        {
-            _context.ProductIngredients.Add(productIngredient);
-            _context.SaveChanges();
-        }
-
-        public bool EditIngredientAsync(int id, IngredientViewModel ingredientModel)
+        public bool EditIngredient(int id, IngredientViewModel ingredientModel)
         {
             var ingredient = _context.Ingredients.Where(i => i.Id == id).FirstOrDefault();
 
             if (ingredient != null)
             {
                 ingredient.Name = ingredientModel.Name;
-                ingredient.StockQuantity = ingredient.StockQuantity;
+                ingredient.StockQuantity = ingredientModel.StockQuantity;
+
+                _context.Ingredients.Update(ingredient);
 
                 _context.SaveChanges();
 
@@ -78,7 +63,7 @@ namespace BigBurguer.Api.Services
             return false;
         }
 
-        public bool DeleteIngredientAsync(int id)
+        public bool DeleteIngredient(int id)
         {
             var ingredient = _context.Ingredients.Where(i => i.Id == id).FirstOrDefault();
 
