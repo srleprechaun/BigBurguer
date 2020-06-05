@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BigBurguer.Api.Infrastructure.Models
 {
@@ -11,6 +10,8 @@ namespace BigBurguer.Api.Infrastructure.Models
         public string Name { get; set; }
         [Column(TypeName = "numeric(10,2)")]
         public decimal Price { get; set; }
-        public ICollection<ProductIngredient> ProductIngredient { get; set; }
+
+        public int IngredientId { get; set; }
+        public Ingredient Ingredient { get; set; }
     }
 }

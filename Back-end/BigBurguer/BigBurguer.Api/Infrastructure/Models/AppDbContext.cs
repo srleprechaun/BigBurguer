@@ -12,22 +12,14 @@ namespace BigBurguer.Api.Infrastructure.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ProductIngredient>().HasKey(pi => new { pi.ProductId, pi.IngredientId });
-
-            modelBuilder.Entity<ProductIngredient>()
-                .HasOne<Product>(pi => pi.Product)
-                .WithMany(p => p.ProductIngredient)
-                .HasForeignKey(pi => pi.ProductId);
-
-            modelBuilder.Entity<ProductIngredient>()
-                .HasOne<Ingredient>(pi => pi.Ingredient)
-                .WithMany(i => i.ProductIngredient)
-                .HasForeignKey(pi => pi.IngredientId);
         }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<ProductIngredient> ProductIngredients { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
     }
 }

@@ -17,7 +17,6 @@ namespace BigBurguer.Api.Controllers
             _ingredientService = ingredientService;
         }
 
-        // GET: api/Ingredients
         [HttpGet]
         public ActionResult<IEnumerable<Ingredient>> GetAll()
         {
@@ -33,12 +32,11 @@ namespace BigBurguer.Api.Controllers
             }
         }
 
-        // POST: api/Ingredients
         [HttpPost]
         public IActionResult Post([FromBody]IngredientViewModel ingredientModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            var result = _ingredientService.CreateIngredientAsync(ingredientModel);
+            var result = _ingredientService.CreateIngredient(ingredientModel);
             if (result == null)
             {
                 return BadRequest(ModelState);
@@ -46,7 +44,6 @@ namespace BigBurguer.Api.Controllers
             return Created($"/api/[controller]/{result}", null);
         }
 
-        // GET: api/Ingredients/<id:int>
         [HttpGet("{id}")]
         public ActionResult<Ingredient> Get([FromRoute]int id)
         {
@@ -60,12 +57,11 @@ namespace BigBurguer.Api.Controllers
             return Ok(result);
         }
 
-        // PUT: api/Ingredients/<id:int>
         [HttpPut("{id}")]
         public ActionResult<Ingredient> Put([FromRoute]int id, [FromBody]IngredientViewModel ingredientModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            var result = _ingredientService.EditIngredientAsync(id, ingredientModel);
+            var result = _ingredientService.EditIngredient(id, ingredientModel);
             if (result == false)
             {
                 return BadRequest(ModelState);
@@ -73,11 +69,10 @@ namespace BigBurguer.Api.Controllers
             return Ok(id);
         }
 
-        // DELETE: api/Ingredients/<id:int>
         [HttpDelete("{id}")]
         public ActionResult<Ingredient> Delete([FromRoute]int id)
         {
-            var result = _ingredientService.DeleteIngredientAsync(id);
+            var result = _ingredientService.DeleteIngredient(id);
             if (result == false)
             {
                 return BadRequest();

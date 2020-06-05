@@ -9,7 +9,5 @@ namespace BigBurguer.Api.Infrastructure.Models
         public int StockQuantity { get; set; }
         [Column(TypeName = "varchar(100)")]
         public string Name { get; set; }
-
-        public virtual ICollection<ProductIngredient> ProductIngredient { get; set; }
     }
 }

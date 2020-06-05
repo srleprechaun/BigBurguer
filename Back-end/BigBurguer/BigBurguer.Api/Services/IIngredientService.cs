@@ -8,10 +8,10 @@ namespace BigBurguer.Api.Services
 {
     public interface IIngredientService
     {
-        public Task<EntityEntry<Ingredient>> CreateIngredientAsync(IngredientViewModel ingredientModel);
+        public EntityEntry<Ingredient> CreateIngredient(IngredientViewModel ingredientModel);
         public List<Ingredient> GetAll();
         public Ingredient GetId(int id);
-        public bool EditIngredientAsync(int id, IngredientViewModel ingredientModel);
-        public bool DeleteIngredientAsync(int id);
+        public bool EditIngredient(int id, IngredientViewModel ingredientModel);
+        public bool DeleteIngredient(int id);
     }
 }
