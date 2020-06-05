@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BigBurguer.Api.Infrastructure.Models
 {
-    public class User
+    public class Customer
     {
         public int Id { get; set; }
         public DateTime BirthDate { get; set; }
