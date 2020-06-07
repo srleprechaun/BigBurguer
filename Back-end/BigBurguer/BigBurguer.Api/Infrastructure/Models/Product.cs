@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace BigBurguer.Api.Infrastructure.Models
 {
@@ -11,7 +13,7 @@ namespace BigBurguer.Api.Infrastructure.Models
         [Column(TypeName = "numeric(10,2)")]
         public decimal Price { get; set; }
 
-        public int IngredientId { get; set; }
-        public Ingredient Ingredient { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<ProductIngredient> ProductIngredients { get; set; }
     }
 }

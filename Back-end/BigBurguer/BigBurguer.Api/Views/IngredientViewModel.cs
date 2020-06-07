@@ -5,7 +5,7 @@ namespace BigBurguer.Api.Views
 	public class IngredientViewModel
 	{
 		public string Name { get; set; }
-		public int StockQuantity { get; set; }
+		public int Quantity { get; set; }
 	}
 
 	public class IngredientValidator : AbstractValidator<IngredientViewModel>

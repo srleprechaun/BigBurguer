@@ -3,7 +3,6 @@ using BigBurguer.Api.Views;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BigBurguer.Api.Services
 {
@@ -21,9 +20,9 @@ namespace BigBurguer.Api.Services
             return _context.Ingredients.ToList();
         }
 
-        public Ingredient GetId(int id)
+        public Ingredient GetId(int ingredientId)
         {
-            return _context.Ingredients.Where(i => i.Id == id).FirstOrDefault();
+            return _context.Ingredients.Find(ingredientId);
         }
 
         public EntityEntry<Ingredient> CreateIngredient(IngredientViewModel ingredientModel)
@@ -31,7 +30,7 @@ namespace BigBurguer.Api.Services
             Ingredient ingredient = new Ingredient()
             {
                 Name = ingredientModel.Name,
-                StockQuantity = ingredientModel.StockQuantity
+                StockQuantity = ingredientModel.Quantity
             };
 
             var result = _context.Ingredients.Add(ingredient);
@@ -52,7 +51,7 @@ namespace BigBurguer.Api.Services
             if (ingredient != null)
             {
                 ingredient.Name = ingredientModel.Name;
-                ingredient.StockQuantity = ingredientModel.StockQuantity;
+                ingredient.StockQuantity = ingredientModel.Quantity;
 
                 _context.Ingredients.Update(ingredient);
 

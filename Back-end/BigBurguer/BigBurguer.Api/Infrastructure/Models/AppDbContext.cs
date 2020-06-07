@@ -7,11 +7,12 @@ namespace BigBurguer.Api.Infrastructure.Models
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
-        { 
+        {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ProductIngredient>().HasKey(pi => new { pi.ProductId, pi.IngredientId });
         }
 
         public DbSet<Product> Products { get; set; }
