@@ -58,18 +58,11 @@ namespace BigBurguer.Api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Price = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    IngredientId = table.Column<int>(type: "int", nullable: false)
+                    Price = table.Column<decimal>(type: "numeric(10,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_Ingredients_IngredientId",
-                        column: x => x.IngredientId,
-                        principalTable: "Ingredients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,26 +96,25 @@ namespace BigBurguer.Api.Migrations
                 name: "ProductIngredients",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<int>(type: "int", nullable: true),
-                    IngredientId = table.Column<int>(type: "int", nullable: true)
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    IngredientId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductIngredients", x => x.Id);
+                    table.PrimaryKey("PK_ProductIngredients", x => new { x.ProductId, x.IngredientId });
                     table.ForeignKey(
                         name: "FK_ProductIngredients_Ingredients_IngredientId",
                         column: x => x.IngredientId,
                         principalTable: "Ingredients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductIngredients_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -178,16 +170,6 @@ namespace BigBurguer.Api.Migrations
                 name: "IX_ProductIngredients_IngredientId",
                 table: "ProductIngredients",
                 column: "IngredientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductIngredients_ProductId",
-                table: "ProductIngredients",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_IngredientId",
-                table: "Products",
-                column: "IngredientId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -202,6 +184,9 @@ namespace BigBurguer.Api.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
+                name: "Ingredients");
+
+            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
@@ -209,9 +194,6 @@ namespace BigBurguer.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderStatuses");
-
-            migrationBuilder.DropTable(
-                name: "Ingredients");
         }
     }
 }

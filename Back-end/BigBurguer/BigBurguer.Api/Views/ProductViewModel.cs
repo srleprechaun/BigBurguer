@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using System.Collections.Generic;
 
 namespace BigBurguer.Api.Views
 {
@@ -7,7 +8,7 @@ namespace BigBurguer.Api.Views
         public string ImageUrl { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public int? IngredientId { get; set; }
+        public List<ProductIngredientViewModel> Ingredients { get; set; }
 
     }
     public class ProductValidator : AbstractValidator<ProductViewModel>

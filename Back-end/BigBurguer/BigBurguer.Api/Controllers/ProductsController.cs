@@ -16,13 +16,13 @@ namespace BigBurguer.Api.Controllers
         {
             _productService = productService;
         }
-        // GET: api/Products
+
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> GetAll()
+        public ActionResult<List<Product>> Index()
         {
              try
             {
-                var result = _productService.GetAll();
+                var result = _productService.Get();
                 return Ok(result);
             }
             catch (System.Exception e)
@@ -31,25 +31,11 @@ namespace BigBurguer.Api.Controllers
 
             }
         }
-        // POST: api/Products
-        
-        [HttpPost]
-        public IActionResult Post([FromBody]ProductViewModel productModel)
-        {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            var result = _productService.CreateProductAsync(productModel);
-            if (result == null)
-            {
-                return BadRequest(ModelState);
-            }
-            return Created($"/api/[controller]/{result}", null);
-        }
 
-        // GET: api/Products/<id:int>
-        [HttpGet("{id}")]
-        public ActionResult<Product> Get([FromRoute]int id)
+        [HttpGet("{productId}")]
+        public ActionResult<Product> Details([FromRoute]int productId)
         {
-            var result = _productService.GetId(id);
+            var result = _productService.GetId(productId);
 
             if (result == null)
             {
@@ -59,29 +45,52 @@ namespace BigBurguer.Api.Controllers
             return Ok(result);
         }
 
-        // PUT: api/Products/<id:int>
-        [HttpPut("{id}")]
-        public ActionResult<Product> Put([FromRoute]int id, [FromBody]ProductViewModel productModel)
+        [HttpGet("{productId}/ingredients")]
+        public ActionResult<Product> IngredientsDetails([FromRoute]int productId)
+        {
+            var result = _productService.GetIngredientsDetails(productId);
+
+            if (result == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody]ProductViewModel productModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            var result = _productService.EditProductAsync(id, productModel);
+            var result = _productService.CreateProduct(productModel);
+            if (result == null)
+            {
+                return BadRequest(ModelState);
+            }
+            return Created($"/api/Products/{result}", null);
+        }
+
+        [HttpPut("{productId}")]
+        public ActionResult<Product> Edit([FromRoute]int productId, [FromBody]ProductViewModel productModel)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            var result = _productService.EditProduct(productId, productModel);
             if (result == false)
             {
                 return BadRequest(ModelState);
             }
-            return Ok(id);
+            return Ok(productId);
         }
 
-        // DELETE: api/Products/<id:int>
-        [HttpDelete("{id}")]
-        public ActionResult<Product> Delete([FromRoute]int id)
+        [HttpDelete("{productId}")]
+        public ActionResult<Product> Delete([FromRoute]int productId)
         {
-            var result = _productService.DeleteProductAsync(id);
+            var result = _productService.DeleteProduct(productId);
             if (result == false)
             {
                 return BadRequest();
             }
-            return Ok(id);
+            return Ok(productId);
         }
     }
 }

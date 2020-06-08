@@ -1,9 +1,9 @@
 ﻿using BigBurguer.Api.Infrastructure.Models;
 using BigBurguer.Api.Views;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BigBurguer.Api.Services
 {
@@ -14,15 +14,18 @@ namespace BigBurguer.Api.Services
         {
             _context = context;
         }
-        public List<Product> GetAll()
+
+        public List<Product> Get()
         {
             return _context.Products.ToList();
         }
-        public Product GetId(int id)
+
+        public Product GetId(int productId)
         {
-            return _context.Products.Where(i => i.Id == id).FirstOrDefault();
+            return _context.Products.Find(productId);
         }
-        public async Task<EntityEntry<Product>> CreateProductAsync(ProductViewModel productModel)
+
+        public EntityEntry<Product> CreateProduct(ProductViewModel productModel)
         {
             Product product = new Product()
             {
@@ -31,35 +34,31 @@ namespace BigBurguer.Api.Services
                 Price = productModel.Price
             };
 
-            var result = _context.Products.AddAsync(product);
+            var result = _context.Products.Add(product);
 
             if (result != null)
             {
                 _context.SaveChanges();
 
-                if (productModel.IngredientId != null)
+                foreach (var ingrId in productModel.Ingredients)
                 {
-                    var productIngredient = new ProductIngredient()
-                    {
-                        ProductId = product.Id,
-                        IngredientId = productModel.IngredientId
-                    };
+                    ProductIngredient prodIng = new ProductIngredient();
+                    prodIng.ProductId = result.Entity.Id;
+                    prodIng.IngredientId = ingrId.IngredientId;
+                    prodIng.Quantity = ingrId.Quantity;
 
-                    AddProductIngredient(productIngredient);
+                    _context.ProductIngredients.Add(prodIng);
+                    _context.SaveChanges();
                 }
 
-                return await result;
+                return result;
             }
             return null;
         }
-        private void AddProductIngredient(ProductIngredient productIngredient)
+
+        public bool EditProduct(int productId, ProductViewModel productModel)
         {
-            _context.ProductIngredients.Add(productIngredient);
-            _context.SaveChanges();
-        }
-        public bool EditProductAsync(int id, ProductViewModel productModel)
-        {
-            var product = _context.Products.Where(i => i.Id == id).FirstOrDefault();
+            var product = _context.Products.Find(productId);
 
             if (product != null)
             {
@@ -67,15 +66,29 @@ namespace BigBurguer.Api.Services
                 product.Name = productModel.Name;
                 product.Price = productModel.Price;
 
+                _context.Products.Update(product);
+
                 _context.SaveChanges();
+
+                foreach (var ingrId in productModel.Ingredients)
+                {
+                    ProductIngredient prodIng = new ProductIngredient();
+                    prodIng.ProductId = product.Id;
+                    prodIng.IngredientId = ingrId.IngredientId;
+                    prodIng.Quantity = ingrId.Quantity;
+
+                    _context.ProductIngredients.Update(prodIng);
+                    _context.SaveChanges();
+                }
 
                 return true;
             }
             return false;
         }
-        public bool DeleteProductAsync(int id)
+
+        public bool DeleteProduct(int productId)
         {
-            var product = _context.Products.Where(i => i.Id == id).FirstOrDefault();
+            var product = _context.Products.Where(i => i.Id == productId).FirstOrDefault();
 
             if (product != null)
             {
@@ -86,6 +99,16 @@ namespace BigBurguer.Api.Services
             }
 
             return false;
+        }
+
+        public List<ProductIngredient> GetIngredientsDetails(int productId)
+        {
+            var productIngredients = _context.ProductIngredients
+                .Include(i => i.Ingredient)
+                .Where(p => p.ProductId == productId)
+                .ToList();
+
+            return productIngredients;
         }
     }
 }
