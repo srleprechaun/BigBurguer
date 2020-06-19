@@ -45,6 +45,7 @@ namespace BigBurguer.Api
         {
             services.AddScoped<IIngredientService, IngredientService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             services.AddTransient<IValidator<IngredientViewModel>, IngredientValidator>();
             services.AddTransient<IValidator<ProductViewModel>, ProductValidator>();
