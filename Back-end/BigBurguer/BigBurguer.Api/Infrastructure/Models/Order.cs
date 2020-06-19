@@ -9,7 +9,7 @@ namespace BigBurguer.Api.Infrastructure.Models
         public int OrderStatusId { get; set; }
         public DateTime OrderDate { get; set; }
 
-        public Customer Customer { get; set; }
-        public OrderStatus OrderStatus { get; set; }
+        public virtual Customer Customer { get; set; }
+        public virtual OrderStatus OrderStatus { get; set; }
     }
 }
