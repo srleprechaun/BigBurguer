@@ -3,6 +3,7 @@ using BigBurguer.Api.Infrastructure.Models;
 using BigBurguer.Api.Views;
 using Microsoft.AspNetCore.Mvc;
 using BigBurguer.Api.Services;
+using Microsoft.AspNetCore.Cors;
 
 
 namespace BigBurguer.Api.Controllers
@@ -20,7 +21,7 @@ namespace BigBurguer.Api.Controllers
         [HttpGet]
         public ActionResult<List<Product>> Index()
         {
-             try
+            try
             {
                 var result = _productService.Get();
                 return Ok(result);
