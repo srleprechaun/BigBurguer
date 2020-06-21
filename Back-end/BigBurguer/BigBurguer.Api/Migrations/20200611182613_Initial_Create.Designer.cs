@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BigBurguer.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200607155438_Initial_Create")]
+    [Migration("20200611182613_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

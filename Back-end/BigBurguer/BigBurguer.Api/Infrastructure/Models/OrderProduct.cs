@@ -14,7 +14,7 @@ namespace BigBurguer.Api.Infrastructure.Models
         [Column(TypeName = "numeric(10,2)")]
         public double? Discount { get; set; }
 
-        public Product Product { get; set; }
-        public Order Order { get; set; }
+        public virtual Product Product { get; set; }
+        public virtual Order Order { get; set; }
     }
 }
