@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import CurrencyInput from 'react-currency-input';
 import Ingredient from './ingredient/ingredient';
+import apiBase from '../../services/base';
+
+import './style.css';
 
 export default class Product extends Component {
   state = {
@@ -11,7 +14,20 @@ export default class Product extends Component {
       imageUrl: "",
       type: ""
     },
+    ingredients: [],
     isOpen: false
+  }
+
+  productBase = {
+    name: "",
+    price: 0,
+    ingredients: [],
+    imageUrl: "",
+    type: ""
+  };
+
+  componentDidMount() {
+    this.updateIngredients();
   }
 
   handleChange(event, maskedvalue, floatvalue) {
@@ -34,18 +50,41 @@ export default class Product extends Component {
     }
   }
 
-  handleSubmit(event) {
-    console.log(this.state.product);
-    event.preventDefault();
+  async handleSubmit(event) {
+    let product = this.state.product;
+    let ingredients = this.state.ingredients;
+    product.ingredients = ingredients.filter(i => i.quantity > 0);
+    console.log(product);
+
+    await apiBase.post('/Products', product);
+    ingredients.forEach(i => i.quantity = 0);
+    this.setState({ product: this.productBase, ingredients: ingredients });
+    alert('Produto Cadastrado com Sucesso')
   }
 
-  updateIngredients() {
-    console.log("update ingredients");
+  updateIngredients = async () => {
+    const response = await apiBase.get('/Ingredients');
+    const ingredients = [];
+
+    Object.values(response.data).forEach(p => {
+      ingredients.push({ ingredientId: p.id, name: p.name, quantity: 0});
+    });
+    this.setState({ ingredients: ingredients });
+  }
+
+  changeIngredient(event, ingredientId) {
+    let ingredients = this.state.ingredients;
+    let ingredient = ingredients.find(i => i.ingredientId == ingredientId);
+    if (ingredient)
+      ingredient.quantity = +event.target.value;
+    
+    this.setState({ ingredients: ingredients })
   }
 
   toggleIngredientOpen = () => this.setState({ isOpen: !this.state.isOpen });
 
   render () {
+    const ingredients = [...this.state.ingredients];
     
     return (
       <div role="main">
@@ -58,10 +97,10 @@ export default class Product extends Component {
         <div className="container">
           <div id='cadastroProduto'>
             <h1>Cadastro de Produto</h1>
-            <form onSubmit={this.handleSubmit.bind(this)}>
+            <form>
               <div>
                 <label id="lblName">Nome:</label>
-                <input id="txtName" type="text" className="form-control" onChange={this.handleChange.bind(this)} />
+                <input id="txtName" type="text" value={this.state.product.name} className="form-control" onChange={this.handleChange.bind(this)} />
               </div>
               <div>
                 <label id="lblPrice">Valor:</label>
@@ -69,7 +108,7 @@ export default class Product extends Component {
               </div>
               <div>
                 <label id="lblType">Tipo:</label>
-                <select id="slcType" className="custom-select my-1 mr-sm-2" value={this.state.value} onChange={this.handleChange.bind(this)}>
+                <select id="slcType" className="custom-select my-1 mr-sm-2" value={this.state.product.type} onChange={this.handleChange.bind(this)}>
                   <option value="" defaultValue>Selecione</option>
                   <option value="1">Hamburguer</option>
                   <option value="2">Bebida</option>
@@ -77,12 +116,16 @@ export default class Product extends Component {
               </div>
               <div>
                 <label id="lblIngredients">Lista de Ingredientes:</label>
-                <br></br>
-                <input type="checkbox" name="teste" label="Teste" /> Ingrediente 1
-                <br></br>
-                <input type="checkbox" name="teste" label="Teste" /> Ingrediente 2
-                <br></br>
-                <input type="checkbox" name="teste" label="Teste" /> Ingrediente 3
+                {ingredients.map(i => (
+                    <div key={"div" + i.ingredientId} className="row">
+                      <div key={"div1" + i.ingredientId} className="col-lg-1">
+                        <span key={i.ingredientId}>{i.name}</span>
+                      </div>
+                      <div key={"div2" + i.ingredientId} className="col-lg-1">
+                        <input key={"input" + i.ingredientId} type="number" value={i.quantity} className="form-control" onChange={(e) => {this.changeIngredient(e, i.ingredientId)}}></input>
+                      </div>
+                    </div>
+                  ))}
               </div>
               <p></p>
               <div className="btn-group" onClick={this.toggleIngredientOpen}>
@@ -98,10 +141,10 @@ export default class Product extends Component {
               <p></p>
               <div>
                 <label id="lblProductUrl">Imagem do Produto:</label>
-                <input id="txtProductUrl" type="text" className="form-control" onChange={this.handleChange.bind(this)} />
+                <input id="txtProductUrl" type="text" className="form-control" value={this.state.product.imageUrl} onChange={this.handleChange.bind(this)} />
               </div>
               <br></br>
-              <input id="btnSubmit" type="submit" className="btn btn-primary" value="Cadastrar Produto" />
+              <input id="btnSubmit" type="button" className="btn btn-primary" value="Cadastrar Produto" onClick={this.handleSubmit.bind(this)} />
             </form>
           </div>
         </div>

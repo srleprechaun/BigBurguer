@@ -18,11 +18,11 @@ export default class Home extends Component {
   }
 
   loadProducts = async () => {
-      const response = await apiBase.get('/products');
+      const response = await apiBase.get('/Products');
       const products = [];
       
       Object.values(response.data).forEach(p => {
-        products.push({ id: p.id, imageUrl: p.imageUrl, name: p.name, ingredients: p.ingredients, price: p.price, type: p.type, selected: 0 });
+        products.push({ id: p.id, imageUrl: p.imageUrl, name: p.name, ingredients: [], price: p.price, type: "Hamburguer", selected: 0 });
       });
       this.setState({ products: products });
       this.selectCartProducts();

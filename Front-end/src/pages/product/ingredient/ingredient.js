@@ -1,13 +1,36 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+
+import apiBase from '../../../services/base';
 
 export default class Ingredient extends Component {
+  state = {
+    ingredient: {
+      name: "",
+      quantity: 0
+    }
+  }
+
   constructor(props) {
     super(props)
   }
 
-  saveIngredient() {
+  async saveIngredient() {
+    await apiBase.post('/Ingredients', {name: this.state.ingredient.name, quantity: +this.state.ingredient.quantity } );
     this.props.updateIngredients();
+  }
+
+  handleChange(event) {
+    switch (event.target.id) {
+      case "txtName":
+        this.setState({ ingredient: { ...this.state.ingredient, name: event.target.value } })
+        break;
+      case "txtQuantity":
+        this.setState({ ingredient: { ...this.state.ingredient, quantity: event.target.value } })
+        break;
+    
+      default:
+        break;
+    }
   }
 
   render() {
@@ -16,17 +39,13 @@ export default class Ingredient extends Component {
         <h4>Cadastro de Ingrediente</h4>
         <div>
           <div className="row">
-            <div className="col-lg-6">
+            <div className="col-lg-8">
               <label id="lblNome">Nome:</label>
-              <input id="txtNome" type="text" className="form-control" />
+              <input id="txtName" type="text" className="form-control" autoComplete="off" onChange={this.handleChange.bind(this)} />
             </div>
             <div className="col-lg-3">
-              <label id="lblValor">Valor:</label>
-              <input id="txtValor" type="number" className="form-control" />
-            </div>
-            <div className="col-lg-2">
               <label id="lblValor">Quantidade:</label>
-              <input id="txtValor" type="number" className="form-control" />
+              <input id="txtQuantity" type="number" className="form-control" onChange={this.handleChange.bind(this)} />
             </div>
             <div className="col-lg-1">
               <label id="lblValor">&nbsp;</label>

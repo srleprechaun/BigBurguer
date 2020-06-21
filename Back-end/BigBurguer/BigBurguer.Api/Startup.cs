@@ -33,6 +33,15 @@ namespace BigBurguer.Api
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("BigBurguerDBConnection")));
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+                    });
+            });
+
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
@@ -66,6 +75,7 @@ namespace BigBurguer.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
