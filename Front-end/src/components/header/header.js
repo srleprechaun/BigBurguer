@@ -56,7 +56,7 @@ export default class Header extends Component {
                 <a href="/produto" className="dropdown-item">Cadastrar Produto</a>
                 <a href="" className="dropdown-item">Meus dados</a>
                 <a href="" className="dropdown-item">Sair</a>
-                <a href="" className="dropdown-item">Entrar</a>
+                <a href="/login" className="dropdown-item">Entrar</a>
               </div>
             </div>
           </div>
