@@ -41,13 +41,13 @@ namespace BigBurguer.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            return Created($"/api/[controller]/{result}", null);
+            return Created($"/api/Ingredients/{result}", null);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<Ingredient> Get([FromRoute]int id)
+        [HttpGet("{ingredientId:int}")]
+        public ActionResult<Ingredient> Get([FromRoute]int ingredientId)
         {
-            var result = _ingredientService.GetId(id);
+            var result = _ingredientService.GetId(ingredientId);
 
             if (result == null)
             {
@@ -57,27 +57,27 @@ namespace BigBurguer.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
-        public ActionResult<Ingredient> Put([FromRoute]int id, [FromBody]IngredientViewModel ingredientModel)
+        [HttpPut("{ingredientId:int}")]
+        public ActionResult<Ingredient> Put([FromRoute]int ingredientId, [FromBody]IngredientViewModel ingredientModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            var result = _ingredientService.EditIngredient(id, ingredientModel);
+            var result = _ingredientService.EditIngredient(ingredientId, ingredientModel);
             if (result == false)
             {
                 return BadRequest(ModelState);
             }
-            return Ok(id);
+            return Ok(ingredientId);
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult<Ingredient> Delete([FromRoute]int id)
+        [HttpDelete("{ingredientId:int}")]
+        public ActionResult<Ingredient> Delete([FromRoute]int ingredientId)
         {
-            var result = _ingredientService.DeleteIngredient(id);
+            var result = _ingredientService.DeleteIngredient(ingredientId);
             if (result == false)
             {
                 return BadRequest();
             }
-            return Ok(id);
+            return StatusCode(204);
         }
     }
 }

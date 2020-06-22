@@ -1,5 +1,5 @@
-﻿
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace BigBurguer.Api.Infrastructure.Models
 {
@@ -8,13 +8,14 @@ namespace BigBurguer.Api.Infrastructure.Models
         public int Id { get; set; }
         public int ProductId { get; set; }
         public int OrderId { get; set; }
+        public string ProductName { get; set; }
         public int Quantity { get; set; }
         [Column(TypeName = "numeric(10,2)")]
         public double Price { get; set; }
         [Column(TypeName = "numeric(10,2)")]
         public double? Discount { get; set; }
 
-        public virtual Product Product { get; set; }
-        public virtual Order Order { get; set; }
+        [JsonIgnore]
+        public Product Product { get; set; }
     }
 }

@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using BigBurguer.Api.Infrastructure.Models;
+﻿using BigBurguer.Api.Infrastructure.Models;
+using BigBurguer.Api.Services;
 using BigBurguer.Api.Views;
 using Microsoft.AspNetCore.Mvc;
-using BigBurguer.Api.Services;
-using Microsoft.AspNetCore.Cors;
+using System.Collections.Generic;
 
 
 namespace BigBurguer.Api.Controllers
@@ -23,17 +22,16 @@ namespace BigBurguer.Api.Controllers
         {
             try
             {
-                var result = _productService.Get();
+                var result = _productService.GetAll();
                 return Ok(result);
             }
             catch (System.Exception e)
             {
                 throw e;
-
             }
         }
 
-        [HttpGet("{productId}")]
+        [HttpGet("{productId:int}")]
         public ActionResult<Product> Details([FromRoute]int productId)
         {
             var result = _productService.GetId(productId);
@@ -46,7 +44,7 @@ namespace BigBurguer.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{productId}/ingredients")]
+        [HttpGet("{productId:int}/Ingredients")]
         public ActionResult<Product> IngredientsDetails([FromRoute]int productId)
         {
             var result = _productService.GetIngredientsDetails(productId);
@@ -71,7 +69,7 @@ namespace BigBurguer.Api.Controllers
             return Created($"/api/Products/{result}", null);
         }
 
-        [HttpPut("{productId}")]
+        [HttpPut("{productId:int}")]
         public ActionResult<Product> Edit([FromRoute]int productId, [FromBody]ProductViewModel productModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
@@ -83,7 +81,7 @@ namespace BigBurguer.Api.Controllers
             return Ok(productId);
         }
 
-        [HttpDelete("{productId}")]
+        [HttpDelete("{productId:int}")]
         public ActionResult<Product> Delete([FromRoute]int productId)
         {
             var result = _productService.DeleteProduct(productId);
@@ -91,7 +89,7 @@ namespace BigBurguer.Api.Controllers
             {
                 return BadRequest();
             }
-            return Ok(productId);
+            return StatusCode(204);
         }
     }
 }

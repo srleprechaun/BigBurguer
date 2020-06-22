@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BigBurguer.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200611182613_Initial_Create")]
+    [Migration("20200621234330_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,11 +79,16 @@ namespace BigBurguer.Api.Migrations
                     b.Property<int>("OrderStatusId")
                         .HasColumnType("int");
 
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("OrderStatusId");
+
+                    b.HasIndex("PaymentMethodId");
 
                     b.ToTable("Orders");
                 });
@@ -106,6 +111,9 @@ namespace BigBurguer.Api.Migrations
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -134,6 +142,21 @@ namespace BigBurguer.Api.Migrations
                     b.ToTable("OrderStatuses");
                 });
 
+            modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.PaymentMethod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(70)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentMethod");
+                });
+
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -149,6 +172,9 @@ namespace BigBurguer.Api.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric(10,2)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
@@ -186,12 +212,18 @@ namespace BigBurguer.Api.Migrations
                         .HasForeignKey("OrderStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BigBurguer.Api.Infrastructure.Models.PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.OrderProduct", b =>
                 {
-                    b.HasOne("BigBurguer.Api.Infrastructure.Models.Order", "Order")
-                        .WithMany()
+                    b.HasOne("BigBurguer.Api.Infrastructure.Models.Order", null)
+                        .WithMany("OrderProducts")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -206,12 +238,12 @@ namespace BigBurguer.Api.Migrations
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.ProductIngredient", b =>
                 {
                     b.HasOne("BigBurguer.Api.Infrastructure.Models.Ingredient", "Ingredient")
-                        .WithMany("ProductIngredients")
+                        .WithMany()
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BigBurguer.Api.Infrastructure.Models.Product", "Product")
+                    b.HasOne("BigBurguer.Api.Infrastructure.Models.Product", null)
                         .WithMany("ProductIngredients")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)

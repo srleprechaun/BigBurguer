@@ -18,11 +18,12 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<OrderProduct>> GetAll()
+        public ActionResult<IEnumerable<Order>> GetAll()
         {
              try
             {
                 var result = _orderService.GetAll();
+                
                 return Ok(result);
             }
             catch (System.Exception e)
@@ -33,7 +34,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpGet("{orderId:int}")]
-        public ActionResult<IEnumerable<OrderProduct>> Details([FromRoute]int orderId)
+        public ActionResult<IEnumerable<Order>> Details([FromRoute]int orderId)
         {
             var result = _orderService.GetOrderById(orderId);
 
@@ -54,30 +55,29 @@ namespace BigBurguer.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            return Created($"/api/[controller]/{result}", null);
+            return Created($"/api/Order/{result}", null);
         }
 
-        [HttpPut("{orderProductId:int}")]
-        public ActionResult<Ingredient> Put([FromRoute]int orderProductId, [FromBody]OrderProductViewModel orderViewModel)
+        [HttpDelete("{orderId:int}")]
+        public IActionResult Delete([FromRoute]int orderId)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            var result = _orderService.UpdateOrderProduct(orderProductId, orderViewModel);
-            if (result == false)
-            {
-                return BadRequest(ModelState);
-            }
-            return Ok(result);
-        }
-
-        [HttpDelete("{id}")]
-        public ActionResult<Ingredient> Delete([FromRoute]int id)
-        {
-            var result = _orderService.DeleteOrderProduct(id);
-            if (result == false)
+            var result = _orderService.DeleteOrder(orderId);
+            if (result == null)
             {
                 return BadRequest();
             }
-            return Ok(id);
+            return StatusCode(204);
+        }
+
+        [HttpDelete("{orderId:int}/OrderProduct/{orderProdId:int}")]
+        public IActionResult DeleteOrderProduct([FromRoute]int orderId, [FromRoute]int orderProdId)
+        {
+            var result = _orderService.DeleteOrderProduct(orderId, orderProdId);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return StatusCode(204);
         }
     }
 }
