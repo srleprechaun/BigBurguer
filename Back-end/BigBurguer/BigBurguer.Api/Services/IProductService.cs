@@ -8,10 +8,10 @@ namespace BigBurguer.Api.Services
     public interface IProductService
     {
         public EntityEntry<Product> CreateProduct(ProductViewModel productModel);
-        public List<Product> Get();
+        public List<Product> GetAll();
         public Product GetId(int productId);
         public bool EditProduct(int id, ProductViewModel productModel);
         public bool DeleteProduct(int productId);
-        public List<ProductIngredient> GetIngredientsDetails(int productId);
+        public Product GetIngredientsDetails(int productId);
     }
 }

@@ -15,7 +15,7 @@ namespace BigBurguer.Api.Services
             _context = context;
         }
 
-        public List<Product> Get()
+        public List<Product> GetAll()
         {
             return _context.Products.ToList();
         }
@@ -31,7 +31,8 @@ namespace BigBurguer.Api.Services
             {
                 ImageUrl = productModel.ImageUrl,
                 Name = productModel.Name,
-                Price = productModel.Price
+                Price = productModel.Price,
+                Type = productModel.Type
             };
 
             var result = _context.Products.Add(product);
@@ -65,6 +66,7 @@ namespace BigBurguer.Api.Services
                 product.ImageUrl = productModel.ImageUrl;
                 product.Name = productModel.Name;
                 product.Price = productModel.Price;
+                product.Type = productModel.Type;
 
                 _context.Products.Update(product);
 
@@ -101,14 +103,11 @@ namespace BigBurguer.Api.Services
             return false;
         }
 
-        public List<ProductIngredient> GetIngredientsDetails(int productId)
+        public Product GetIngredientsDetails(int productId)
         {
-            var productIngredients = _context.ProductIngredients
-                .Include(i => i.Ingredient)
-                .Where(p => p.ProductId == productId)
-                .ToList();
-
-            return productIngredients;
+            return _context.Products
+                .Include(i => i.ProductIngredients)
+                .FirstOrDefault(pi => pi.Id == productId);
         }
     }
 }

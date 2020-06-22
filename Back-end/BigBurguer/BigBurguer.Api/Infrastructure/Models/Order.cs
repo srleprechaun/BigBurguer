@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BigBurguer.Api.Infrastructure.Models
 {
@@ -8,8 +9,11 @@ namespace BigBurguer.Api.Infrastructure.Models
         public int CustomerId { get; set; }
         public int OrderStatusId { get; set; }
         public DateTime OrderDate { get; set; }
+        public int PaymentMethodId { get; set; }
 
-        public virtual Customer Customer { get; set; }
-        public virtual OrderStatus OrderStatus { get; set; }
+        public Customer Customer { get; set; }
+        public ICollection<OrderProduct> OrderProducts { get; set; }
+        public OrderStatus OrderStatus { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
     }
 }

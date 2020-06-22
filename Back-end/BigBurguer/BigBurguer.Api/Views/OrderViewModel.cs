@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using BigBurguer.Api.Infrastructure.Enum;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +9,9 @@ namespace BigBurguer.Api.Views
 	{
 		public DateTime OrderDate { get; set; }
 		public int CustomerId { get; set; }
-		public List<OrderProductViewModel> Products { get; set; }
+		public int PaymentMethodId { get; set; }
+
+		public ICollection<OrderProductViewModel> Products { get; set; }
 	}
 
 	public class OrderValidator : AbstractValidator<OrderViewModel>

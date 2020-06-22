@@ -17,18 +17,25 @@ namespace BigBurguer.Api.Services
             _context = context;
         }
 
-        public List<OrderProduct> GetAll()
+        public List<Order> GetAll()
         {
-            return _context.OrderProducts.Include(p => p.Product).Include(o => o.Order).ToList();
+            return _context.Orders
+                .Include(op => op.OrderProducts)
+                .Include(c => c.Customer)
+                .Include(os => os.OrderStatus)
+                .Include(p => p.PaymentMethod)
+                .ToList();
         }
 
-        public List<OrderProduct> GetOrderById(int orderId)
+        public List<Order> GetOrderById(int orderId)
         {
-            return _context.OrderProducts
-                .Include(p => p.Product)
-                .Include(o => o.Order)
-                .Where(o => o.OrderId == orderId)
-                .ToList();
+            return _context.Orders
+                 .Include(op => op.OrderProducts)
+                 .Include(c => c.Customer)
+                 .Include(os => os.OrderStatus)
+                 .Include(p => p.PaymentMethod)
+                 .Where(o => o.Id == orderId)
+                 .ToList();
         }
 
         public EntityEntry<Order> CreateOrder(OrderViewModel orderViewModel)
@@ -37,7 +44,8 @@ namespace BigBurguer.Api.Services
             {
                 OrderDate = orderViewModel.OrderDate,
                 OrderStatusId = (int)OrderStatus.OrderReceived,
-                CustomerId = orderViewModel.CustomerId
+                CustomerId = orderViewModel.CustomerId,
+                PaymentMethodId = (int) orderViewModel.PaymentMethodId
             };
 
             var result = _context.Orders.Add(order);
@@ -49,8 +57,9 @@ namespace BigBurguer.Api.Services
                 foreach (var orderProduct in orderViewModel.Products)
                 {
                     OrderProduct orderProd = new OrderProduct();
-                    orderProd.OrderId = result.Entity.Id;
                     orderProd.ProductId = orderProduct.ProductId;
+                    orderProd.OrderId = result.Entity.Id;
+                    orderProd.ProductName = _context.Products.Find(orderProduct.ProductId).Name;
                     orderProd.Price = orderProduct.Price;
                     orderProd.Quantity = orderProduct.Quantity;
                     orderProd.Discount = orderProduct.Discount;
@@ -64,38 +73,35 @@ namespace BigBurguer.Api.Services
             return null;
         }
 
-        public bool UpdateOrderProduct(int orderProductId, OrderProductViewModel orderProductViewModel)
+        public Order DeleteOrder(int orderId)
         {
-            var orderProduct = _context.OrderProducts.Find(orderProductId);
+            var order = _context.Orders.Where(o => o.Id == orderId).FirstOrDefault();
 
-            if (orderProduct != null)
+            if (order != null)
             {
-                orderProduct.ProductId = orderProduct.ProductId;
-                orderProduct.Price = orderProductViewModel.Price;
-                orderProduct.Quantity = orderProductViewModel.Quantity;
-                orderProduct.Discount = orderProductViewModel.Discount;
-
-                _context.OrderProducts.Update(orderProduct);
+                _context.Orders.Remove(order);
                 _context.SaveChanges();
 
-                return true;
+                return order;
             }
-            return false;
+
+            return null;
         }
 
-        public bool DeleteOrderProduct(int orderProductId)
+        public OrderProduct DeleteOrderProduct(int orderId, int orderProductId)
         {
-            var orderProduct = _context.OrderProducts.Find(orderProductId);
+            var order = _context.Orders.Include(op => op.OrderProducts).Where(o => o.Id == orderId).FirstOrDefault();
 
-            if (orderProduct != null)
+            if (order != null)
             {
-                _context.OrderProducts.Remove(orderProduct);
+                var orderProd = order.OrderProducts.First(op => op.Id == orderProductId);
+                _context.OrderProducts.Remove(orderProd);
                 _context.SaveChanges();
 
-                return true;
+                return orderProd;
             }
 
-            return false;
+            return null;
         }
     }
 }

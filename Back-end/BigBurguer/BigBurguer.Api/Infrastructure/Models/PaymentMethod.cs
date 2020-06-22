@@ -2,11 +2,10 @@
 
 namespace BigBurguer.Api.Infrastructure.Models
 {
-    public class Ingredient
+    public class PaymentMethod
     {
         public int Id { get; set; }
-        public int StockQuantity { get; set; }
-        [Column(TypeName = "varchar(100)")]
+        [Column(TypeName = "varchar(70)")]
         public string Name { get; set; }
     }
 }
