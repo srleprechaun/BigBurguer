@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigBurguer.Api", "BigBurguer.Api\BigBurguer.Api.csproj", "{76309B44-2821-4614-8349-1E1C1B5155D1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{074D422F-4776-4D72-8129-B81E0872E419}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigBurguer.Test", "test\BigBurguer.Test\BigBurguer.Test.csproj", "{29B57EA4-46B9-4806-9271-3BB8AEE522E7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,20 +15,9 @@ Global
 		{76309B44-2821-4614-8349-1E1C1B5155D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76309B44-2821-4614-8349-1E1C1B5155D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76309B44-2821-4614-8349-1E1C1B5155D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{29B57EA4-46B9-4806-9271-3BB8AEE522E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29B57EA4-46B9-4806-9271-3BB8AEE522E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29B57EA4-46B9-4806-9271-3BB8AEE522E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29B57EA4-46B9-4806-9271-3BB8AEE522E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{892CC83B-9ADB-492B-BAF7-D92D351D034A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{892CC83B-9ADB-492B-BAF7-D92D351D034A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{892CC83B-9ADB-492B-BAF7-D92D351D034A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{892CC83B-9ADB-492B-BAF7-D92D351D034A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{29B57EA4-46B9-4806-9271-3BB8AEE522E7} = {074D422F-4776-4D72-8129-B81E0872E419}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8C0D8261-0EA8-4FD7-9884-B4EB780E2D4E}

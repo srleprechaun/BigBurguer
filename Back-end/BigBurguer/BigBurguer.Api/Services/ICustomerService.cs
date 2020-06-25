@@ -9,8 +9,8 @@ namespace BigBurguer.Api.Services
     {
         public List<Customer> GetAll();
         public Customer GetId(int customerId);
-        public EntityEntry<Customer> CreateCustomer(CustomerViewModel customerModel);   
-        public EntityEntry<Customer> EditCustomer(int id, CustomerViewModel customerModel);
-        public EntityEntry<Customer> DeleteCustomer(int customerId);
+        public EntityEntry<Customer> CreateCustomer(string id, CustomerViewModel customerModel);   
+        public EntityEntry<Customer> EditCustomer(string id, CustomerViewModel customerModel);
+        public EntityEntry<Customer> DeleteCustomer(string customerId);
     }
 }

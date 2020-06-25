@@ -3,9 +3,11 @@ using BigBurguer.Api.Infrastructure.Models;
 using BigBurguer.Api.Views;
 using Microsoft.AspNetCore.Mvc;
 using BigBurguer.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BigBurguer.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class IngredientsController : ControllerBase

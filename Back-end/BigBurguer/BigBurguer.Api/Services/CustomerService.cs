@@ -9,9 +9,12 @@ namespace BigBurguer.Api.Services
     public class CustomerService : ICustomerService
     {
         private readonly AppDbContext _context;
-        public CustomerService(AppDbContext context)
+        IAuthService _authService;
+
+        public CustomerService(AppDbContext context, IAuthService authService)
         {
             _context = context;
+            _authService = authService;
         }
 
         public List<Customer> GetAll()
@@ -24,14 +27,16 @@ namespace BigBurguer.Api.Services
             return _context.Customers.Find(customerId);
         }
 
-        public EntityEntry<Customer> CreateCustomer(CustomerViewModel customerModel)
+        public EntityEntry<Customer> CreateCustomer(string id, CustomerViewModel customerModel)
         {
             Customer customer = new Customer()
             {
+                Id = id,
                 BirthDate = customerModel.BirthDate,
                 Cpf = customerModel.Cpf,
                 Name = customerModel.Name,
-                Password = customerModel.Password
+                Password = _authService.HashPassword(customerModel.Password),
+                Email = customerModel.Email
             };
 
             var result = _context.Customers.Add(customer);
@@ -45,7 +50,7 @@ namespace BigBurguer.Api.Services
             return null;
         }
 
-        public EntityEntry<Customer> EditCustomer(int customerId, CustomerViewModel customerModel)
+        public EntityEntry<Customer> EditCustomer(string customerId, CustomerViewModel customerModel)
         {
             var customer = _context.Customers.Find(customerId);
 
@@ -55,6 +60,7 @@ namespace BigBurguer.Api.Services
                 customer.BirthDate = customerModel.BirthDate;
                 customer.Cpf = customerModel.Cpf;
                 customer.Password = customerModel.Password;
+                customer.Email = customerModel.Email;
 
                 var result = _context.Customers.Update(customer);
 
@@ -64,9 +70,9 @@ namespace BigBurguer.Api.Services
             return null;
         }
 
-        public EntityEntry<Customer> DeleteCustomer(int productId)
+        public EntityEntry<Customer> DeleteCustomer(string customerId)
         {
-            var customer = _context.Customers.Where(i => i.Id == productId).FirstOrDefault();
+            var customer = _context.Customers.Where(i => i.Id == customerId).FirstOrDefault();
 
             if (customer != null)
             {

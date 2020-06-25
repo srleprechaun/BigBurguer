@@ -11,11 +11,11 @@ namespace BigBurguer.Api.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Password = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Password = table.Column<string>(type: "varchar(MAX)", nullable: true),
                     Name = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Email = table.Column<string>(type: "varchar(50)", nullable: true),
                     Cpf = table.Column<string>(type: "varchar(15)", nullable: true)
                 },
                 constraints: table =>
@@ -88,17 +88,18 @@ namespace BigBurguer.Api.Migrations
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     OrderStatusId = table.Column<int>(type: "int", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentMethodId = table.Column<int>(type: "int", nullable: false)
+                    PaymentMethodId = table.Column<int>(type: "int", nullable: false),
+                    CustomerId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Customers_CustomerId",
-                        column: x => x.CustomerId,
+                        name: "FK_Orders_Customers_CustomerId1",
+                        column: x => x.CustomerId1,
                         principalTable: "Customers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Orders_OrderStatuses_OrderStatusId",
                         column: x => x.OrderStatusId,
@@ -179,9 +180,9 @@ namespace BigBurguer.Api.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_CustomerId",
+                name: "IX_Orders_CustomerId1",
                 table: "Orders",
-                column: "CustomerId");
+                column: "CustomerId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_OrderStatusId",
