@@ -1,12 +1,13 @@
 ﻿using BigBurguer.Api.Infrastructure.Models;
 using BigBurguer.Api.Services;
 using BigBurguer.Api.Views;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-
 namespace BigBurguer.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomersController : ControllerBase
@@ -45,20 +46,8 @@ namespace BigBurguer.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        public IActionResult Create([FromBody]CustomerViewModel customerModel)
-        {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            var result = _customerService.CreateCustomer(customerModel);
-            if (result == null)
-            {
-                return BadRequest(ModelState);
-            }
-            return Created($"/api/Customer/{result}", null);
-        }
-
         [HttpPut("{customerId:int}")]
-        public IActionResult Edit([FromRoute]int customerId, [FromBody]CustomerViewModel customerModel)
+        public IActionResult Edit([FromRoute]string customerId, [FromBody]CustomerViewModel customerModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
             var result = _customerService.EditCustomer(customerId, customerModel);
@@ -70,7 +59,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpDelete("{customerId:int}")]
-        public IActionResult Delete([FromRoute]int customerId)
+        public IActionResult Delete([FromRoute]string customerId)
         {
             var result = _customerService.DeleteCustomer(customerId);
             if (result == null)

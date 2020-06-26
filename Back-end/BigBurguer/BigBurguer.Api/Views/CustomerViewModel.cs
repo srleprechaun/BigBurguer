@@ -9,6 +9,7 @@ namespace BigBurguer.Api.Views
         public string Password { get; set; }
         public string Name { get; set; }
         public string Cpf { get; set; }
+        public string Email { get; set; }
     }
     public class CustomerValidator : AbstractValidator<CustomerViewModel>
     {
@@ -21,7 +22,10 @@ namespace BigBurguer.Api.Views
             RuleFor(x => x.Name).Length(0, 100);
 
             RuleFor(x => x.Cpf).NotEmpty().WithMessage("Cpf is required");
-            RuleFor(x => x.Name).Length(0, 15);
+            RuleFor(x => x.Cpf).Length(0, 15);
+
+            RuleFor(x => x.Email).NotEmpty().WithMessage("Email is required");
+            RuleFor(x => x.Email).Length(0, 50);
         }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using BigBurguer.Api.Infrastructure.Models;
 using BigBurguer.Api.Services;
 using BigBurguer.Api.Views;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-
 namespace BigBurguer.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase

@@ -21,10 +21,8 @@ namespace BigBurguer.Api.Migrations
 
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.Customer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
@@ -32,11 +30,14 @@ namespace BigBurguer.Api.Migrations
                     b.Property<string>("Cpf")
                         .HasColumnType("varchar(15)");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(50)");
+
                     b.Property<string>("Name")
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(MAX)");
 
                     b.HasKey("Id");
 
@@ -71,6 +72,9 @@ namespace BigBurguer.Api.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CustomerId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -82,7 +86,7 @@ namespace BigBurguer.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerId1");
 
                     b.HasIndex("OrderStatusId");
 
@@ -201,9 +205,7 @@ namespace BigBurguer.Api.Migrations
                 {
                     b.HasOne("BigBurguer.Api.Infrastructure.Models.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId1");
 
                     b.HasOne("BigBurguer.Api.Infrastructure.Models.OrderStatus", "OrderStatus")
                         .WithMany()
