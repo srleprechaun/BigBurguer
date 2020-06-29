@@ -22,7 +22,7 @@ namespace BigBurguer.Api.Services
             return _context.Customers.ToList();
         }
 
-        public Customer GetId(int customerId)
+        public Customer GetId(string customerId)
         {
             return _context.Customers.Find(customerId);
         }

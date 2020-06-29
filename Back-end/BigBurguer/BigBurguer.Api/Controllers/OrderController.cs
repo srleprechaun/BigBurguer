@@ -48,6 +48,19 @@ namespace BigBurguer.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{userId}")]
+        public ActionResult<IEnumerable<Order>> GetByCustomer([FromRoute]string userId)
+        {
+            var result = _orderService.GetByCustomerId(userId);
+
+            if (result == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(result);
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody]OrderViewModel orderViewModel)
         {
@@ -58,6 +71,18 @@ namespace BigBurguer.Api.Controllers
                 return BadRequest(ModelState);
             }
             return Created($"/api/Order/{result}", null);
+        }
+
+        [HttpPut("{orderId:int}/OrderStatus")]
+        public IActionResult Post([FromRoute]int orderId)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            var result = _orderService.ChangeStatus(orderId);
+            if(result == 0)
+            {
+                return BadRequest();
+            }
+            return StatusCode(200, result);
         }
 
         [HttpDelete("{orderId:int}")]

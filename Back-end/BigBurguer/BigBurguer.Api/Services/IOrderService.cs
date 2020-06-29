@@ -10,7 +10,9 @@ namespace BigBurguer.Api.Services
         public List<Order> GetAll();
         public EntityEntry<Order> CreateOrder(OrderViewModel orderViewModel);
         public List<Order> GetOrderById(int orderId);
+        public List<Order> GetByCustomerId(string customerId);
         OrderProduct DeleteOrderProduct(int orderId, int orderProductId);
         Order DeleteOrder(int orderId);
+        int ChangeStatus(int orderId);
     }
 }

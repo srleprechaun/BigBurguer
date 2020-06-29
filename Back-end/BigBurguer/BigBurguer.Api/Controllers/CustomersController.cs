@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 namespace BigBurguer.Api.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomersController : ControllerBase
@@ -33,8 +32,8 @@ namespace BigBurguer.Api.Controllers
             }
         }
 
-        [HttpGet("{customerId:int}")]
-        public ActionResult<Customer> Details([FromRoute]int customerId)
+        [HttpGet("{customerId}")]
+        public ActionResult<Customer> Details([FromRoute]string customerId)
         {
             var result = _customerService.GetId(customerId);
 
@@ -46,7 +45,7 @@ namespace BigBurguer.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{customerId:int}")]
+        [HttpPut("{customerId}")]
         public IActionResult Edit([FromRoute]string customerId, [FromBody]CustomerViewModel customerModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }

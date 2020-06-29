@@ -69,10 +69,7 @@ namespace BigBurguer.Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CustomerId1")
+                    b.Property<string>("CustomerId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("OrderDate")
@@ -86,7 +83,7 @@ namespace BigBurguer.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId1");
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("OrderStatusId");
 
@@ -205,7 +202,7 @@ namespace BigBurguer.Api.Migrations
                 {
                     b.HasOne("BigBurguer.Api.Infrastructure.Models.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerId1");
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("BigBurguer.Api.Infrastructure.Models.OrderStatus", "OrderStatus")
                         .WithMany()

@@ -4,6 +4,7 @@
     {
         OrderReceived = 1,
         InProgress = 2,
-        Ready = 3
+        Ready = 3,
+        Delivered = 4
     }
 }
