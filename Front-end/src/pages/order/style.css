@@ -1,0 +1,31 @@
+.div-compras {
+    padding-top: 50px;
+    width: 100%;
+}
+
+.h5 {
+    display: block;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.senha {
+    display: block;
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.label-senha {
+    display: block;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.div-senha {
+    border: 1px solid;
+    border-radius: 20px;
+    border-color: black;
+}

@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { AsyncStorage } from 'AsyncStorage';
 import logo from '../../assets/img/logos/logo.png';
 import './style.css'
 
 import $ from 'jquery';
+
+const AUTH_KEY = "AUTHORIZATION_KEY";
 
 export default class Header extends Component {
   state = {
@@ -34,6 +37,19 @@ export default class Header extends Component {
 
   toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
 
+  logout = async () => {
+    await this._storeData(AUTH_KEY, {});
+  }
+
+  _storeData = async (key, obj) => {
+    try {
+      let value = JSON.stringify(obj);
+      await AsyncStorage.setItem(key, value);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   render () {
     const menuClass = `dropdown-menu dropdown-menu-right${this.state.isOpen ? " show" : ""}`;
 
@@ -52,10 +68,10 @@ export default class Header extends Component {
               </button>
               <div className={menuClass}>
                 <a href="/carrinho" className="dropdown-item">Carrinho</a>
-                <a href="" className="dropdown-item">Minhas compras</a>
+                <a href="/compras" className="dropdown-item">Minhas compras</a>
                 <a href="/produto" className="dropdown-item">Cadastrar Produto</a>
-                <a href="" className="dropdown-item">Meus dados</a>
-                <a href="" className="dropdown-item">Sair</a>
+                <a href="/conta" className="dropdown-item">Meus dados</a>
+                <a className="dropdown-item" onClick={this.logout.bind(this)}>Sair</a>
                 <a href="/login" className="dropdown-item">Entrar</a>
               </div>
             </div>

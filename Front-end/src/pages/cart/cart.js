@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import { AsyncStorage } from 'AsyncStorage';
 import apiBase from '../../services/base';
 
+const AUTH_KEY = "AUTHORIZATION_KEY";
+const PAYMENT_CART_KEY = "PAYMENT_CART_KEY";
 const PRODUCTS_CART_KEY = "PRODUCTS_CART_KEY";
 
 export default class Cart extends Component {
   state = {
     products: [],
-    formsOfpayment: [],
+    formsOfPayment: [
+      { id: "1", name: "Dinheiro" },
+      { id: "2", name: "Cartão de Crédito" },
+      { id: "3", name: "Cartão de Débito" }
+    ],
     selectedFormOfPayment: "",
     total: 0,
     canSubmit: true
@@ -15,25 +21,50 @@ export default class Cart extends Component {
 
   componentDidMount() {
     this.getSelectedProducts();
-    this.getFormsOfPayment();
+    this.setSelectedFormOfPayment();
   }
 
   async submitCart() {
     let { products, selectedFormOfPayment } = this.state;
-    let cart = { products: [], formOfPayment: "" };
-    products.forEach(p => cart.products.push({id: p.id, selected: p.selected}));
-    cart.formOfPayment = selectedFormOfPayment;
-    console.log(cart);
-  }
+    let cart = { products: [], paymentMethodId: "", orderDate: null, customerId: "" };
 
-  async getFormsOfPayment() {
-    const response = await apiBase.get('/formsOfPayment');
-    const formsOfPayment = [];
-    
-    Object.values(response.data).forEach(p => {
-      formsOfPayment.push({ id: p.id, name: p.name});
-    });
-    this.setState({ formsOfPayment: formsOfPayment });
+    let customer;
+    try
+    {
+      customer = await this.getLoggedCustomer();
+      cart.customerId = customer.id;
+    }
+    catch (ex) {
+      alert(ex);
+      window.location = "http://localhost:3000/login";
+      return;
+    }
+
+    products.forEach(p => cart.products.push({ productId: p.id, quantity: p.selected, price: p.price, discount: 0 }));
+    cart.paymentMethodId = +selectedFormOfPayment;
+    let current_datetime = new Date();
+    cart.orderDate = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + "T" + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds();
+    const config = { headers: { 'Authorization': 'Bearer ' + customer.token } };
+
+    const response = await apiBase.post('/Order', cart, config)
+      .catch(function (error) {
+        if (error.response) {
+          if (error.response.status == 401) {
+            alert('Você não possui autorização para esta ação.');
+          }
+          else {
+            alert('Ocorreu um erro ao cadastrar a compra.');
+          }
+        }
+      });
+
+    if (response) {
+      this._storeData(PRODUCTS_CART_KEY, []);
+      this._storeData(PAYMENT_CART_KEY, { id: "" });
+      this.getSelectedProducts();
+      this.setSelectedFormOfPayment();
+      // window.location = "http://localhost:3000/compras";
+    }
   }
 
   async getSelectedProducts() {
@@ -49,8 +80,17 @@ export default class Cart extends Component {
     this.setState({ total: total });
   }
 
-  selectFormOfPayment(event) {
+  async selectFormOfPayment(event) {
     this.setState({ selectedFormOfPayment: event.target.value });
+    await this._storeData(PAYMENT_CART_KEY, { id: event.target.value });
+    this.validateCanSubmit();
+  }
+
+  async setSelectedFormOfPayment() {
+    let selected = await this._retrieveData(PAYMENT_CART_KEY);
+    if (selected) {
+      this.setState({ selectedFormOfPayment: selected.id });
+    }
     this.validateCanSubmit();
   }
 
@@ -110,6 +150,16 @@ export default class Cart extends Component {
     let productsInCart = this.state.products;
     let productsValid = productsInCart && productsInCart.length > 0 && productsInCart.find(p => p.selected == 0) == null;
     this.setState({ canSubmit: productsValid });
+  }
+
+  async getLoggedCustomer() {
+    const loggedUser = await this._retrieveData(AUTH_KEY);
+    if (loggedUser && loggedUser.id) {
+      return loggedUser;
+    }
+    else {
+      throw new Error('Você precisa estar logado para completar essa ação.');
+    }
   }
 
   _storeData = async (key, obj) => {
@@ -189,7 +239,7 @@ export default class Cart extends Component {
             </div>
             <div className="row">
               <div className="mx-auto pt-3">
-                <select className="custom-select" value={this.state.value} onChange={this.selectFormOfPayment.bind(this)}>
+                <select className="custom-select" value={selectedFormOfPayment} onChange={this.selectFormOfPayment.bind(this)}>
                   <option defaultValue value="">Selecione uma forma de pagamento</option>
                   {formsOfPayment && formsOfPayment.map(f => (
                     <option value={f.id} key={f.id}>{f.name}</option>

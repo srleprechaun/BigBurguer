@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { AsyncStorage } from 'AsyncStorage';
 import CurrencyInput from 'react-currency-input';
 import Ingredient from './ingredient/ingredient';
 import apiBase from '../../services/base';
 
 import './style.css';
+
+const AUTH_KEY = "AUTHORIZATION_KEY";
 
 export default class Product extends Component {
   state = {
@@ -56,10 +59,25 @@ export default class Product extends Component {
     product.ingredients = ingredients.filter(i => i.quantity > 0);
     console.log(product);
 
-    await apiBase.post('/Products', product);
-    ingredients.forEach(i => i.quantity = 0);
-    this.setState({ product: this.productBase, ingredients: ingredients });
-    alert('Produto Cadastrado com Sucesso')
+    const config = await this.getAuthorization();
+    const response = await apiBase.post('/Products', product, config)
+      .catch(function (error) {
+        if (error.response) {
+          if (error.response.status === 401) {
+            alert('Você não possui autorização para esta ação.');
+          }
+          else {
+            alert('Ocorreu um erro ao cadastrar o produto.');
+          }
+        }
+      });
+
+      if (response) {
+        ingredients.forEach(i => i.quantity = 0);
+            this.setState({ product: this.productBase, ingredients: ingredients });
+            alert('Produto Cadastrado com Sucesso');
+      }
+
   }
 
   updateIngredients = async () => {
@@ -74,11 +92,32 @@ export default class Product extends Component {
 
   changeIngredient(event, ingredientId) {
     let ingredients = this.state.ingredients;
-    let ingredient = ingredients.find(i => i.ingredientId == ingredientId);
+    let ingredient = ingredients.find(i => i.ingredientId === ingredientId);
     if (ingredient)
       ingredient.quantity = +event.target.value;
     
     this.setState({ ingredients: ingredients })
+  }
+
+  getAuthorization = async () => {
+    const auth = await this._retrieveData(AUTH_KEY);
+    if (auth) {
+      return { headers: { 'Authorization': 'Bearer ' + auth.token } };
+    }
+    else {
+      return null;
+    }
+  }
+
+  _retrieveData = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value) {
+        return JSON.parse(value);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   toggleIngredientOpen = () => this.setState({ isOpen: !this.state.isOpen });
@@ -110,8 +149,8 @@ export default class Product extends Component {
                 <label id="lblType">Tipo:</label>
                 <select id="slcType" className="custom-select my-1 mr-sm-2" value={this.state.product.type} onChange={this.handleChange.bind(this)}>
                   <option value="" defaultValue>Selecione</option>
-                  <option value="1">Hamburguer</option>
-                  <option value="2">Bebida</option>
+                  <option value="Hamburguer">Hamburguer</option>
+                  <option value="Drink">Bebida</option>
                 </select>
               </div>
               <div>
