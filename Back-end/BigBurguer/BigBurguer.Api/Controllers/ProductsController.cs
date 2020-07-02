@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 namespace BigBurguer.Api.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -32,6 +31,7 @@ namespace BigBurguer.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{productId:int}")]
         public ActionResult<Product> Details([FromRoute]int productId)
         {
@@ -58,6 +58,7 @@ namespace BigBurguer.Api.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Create([FromBody]ProductViewModel productModel)
         {
@@ -70,6 +71,7 @@ namespace BigBurguer.Api.Controllers
             return Created($"/api/Products/{result}", null);
         }
 
+        [Authorize]
         [HttpPut("{productId:int}")]
         public ActionResult<Product> Edit([FromRoute]int productId, [FromBody]ProductViewModel productModel)
         {
@@ -82,6 +84,7 @@ namespace BigBurguer.Api.Controllers
             return Ok(productId);
         }
 
+        [Authorize]
         [HttpDelete("{productId:int}")]
         public ActionResult<Product> Delete([FromRoute]int productId)
         {

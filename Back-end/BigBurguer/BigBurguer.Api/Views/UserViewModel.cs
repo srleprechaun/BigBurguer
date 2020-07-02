@@ -3,7 +3,7 @@ using System;
 
 namespace BigBurguer.Api.Views
 {
-    public class CustomerViewModel
+    public class UserViewModel
     {
         public DateTime BirthDate { get; set; }
         public string Password { get; set; }
@@ -11,9 +11,9 @@ namespace BigBurguer.Api.Views
         public string Cpf { get; set; }
         public string Email { get; set; }
     }
-    public class CustomerValidator : AbstractValidator<CustomerViewModel>
+    public class UserValidator : AbstractValidator<UserViewModel>
     {
-        public CustomerValidator()
+        public UserValidator()
         {
             RuleFor(x => x.Password).NotEmpty().WithMessage("Password is required");
             RuleFor(x => x.Password).Length(0, 50);

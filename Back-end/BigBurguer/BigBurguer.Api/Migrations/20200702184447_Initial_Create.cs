@@ -8,22 +8,6 @@ namespace BigBurguer.Api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Customers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Password = table.Column<string>(type: "varchar(MAX)", nullable: true),
-                    Name = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Email = table.Column<string>(type: "varchar(50)", nullable: true),
-                    Cpf = table.Column<string>(type: "varchar(15)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Ingredients",
                 columns: table => new
                 {
@@ -80,38 +64,32 @@ namespace BigBurguer.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "Role",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
-                    OrderStatusId = table.Column<int>(type: "int", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentMethodId = table.Column<int>(type: "int", nullable: false),
-                    CustomerId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Name = table.Column<string>(type: "varchar(70)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_Customers_CustomerId1",
-                        column: x => x.CustomerId1,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Orders_OrderStatuses_OrderStatusId",
-                        column: x => x.OrderStatusId,
-                        principalTable: "OrderStatuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Orders_PaymentMethod_PaymentMethodId",
-                        column: x => x.PaymentMethodId,
-                        principalTable: "PaymentMethod",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Password = table.Column<string>(type: "varchar(MAX)", nullable: true),
+                    Name = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Email = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Cpf = table.Column<string>(type: "varchar(15)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -137,6 +115,66 @@ namespace BigBurguer.Api.Migrations
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerId = table.Column<string>(type: "varchar(50)", nullable: true),
+                    OrderStatusId = table.Column<int>(type: "int", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentMethodId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_OrderStatuses_OrderStatusId",
+                        column: x => x.OrderStatusId,
+                        principalTable: "OrderStatuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_PaymentMethod_PaymentMethodId",
+                        column: x => x.PaymentMethodId,
+                        principalTable: "PaymentMethod",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Users_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRoles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -180,9 +218,9 @@ namespace BigBurguer.Api.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_CustomerId1",
+                name: "IX_Orders_CustomerId",
                 table: "Orders",
-                column: "CustomerId1");
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_OrderStatusId",
@@ -198,6 +236,16 @@ namespace BigBurguer.Api.Migrations
                 name: "IX_ProductIngredients_IngredientId",
                 table: "ProductIngredients",
                 column: "IngredientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_RoleId",
+                table: "UserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_UserId",
+                table: "UserRoles",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -209,6 +257,9 @@ namespace BigBurguer.Api.Migrations
                 name: "ProductIngredients");
 
             migrationBuilder.DropTable(
+                name: "UserRoles");
+
+            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
@@ -218,13 +269,16 @@ namespace BigBurguer.Api.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "OrderStatuses");
 
             migrationBuilder.DropTable(
                 name: "PaymentMethod");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

@@ -12,14 +12,14 @@ namespace BigBurguer.Api.Controllers
     public class AuthController : ControllerBase
     {
         IAuthService _authService;
-        ICustomerService _customerService;
+        IUserService _userService;
         private readonly AppDbContext _context;
 
-        public AuthController(IAuthService authService, AppDbContext context, ICustomerService customerService)
+        public AuthController(IAuthService authService, AppDbContext context, IUserService userService)
         {
             _authService = authService;
             _context = context;
-            _customerService = customerService;
+            _userService = userService;
         }
 
         [HttpPost("login")]
@@ -28,8 +28,8 @@ namespace BigBurguer.Api.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var user = model.Cpf == null ?
-                            _context.Customers.FirstOrDefault(c => c.Email == model.Email) :
-                            _context.Customers.FirstOrDefault(c => c.Cpf == model.Cpf);
+                            _context.Users.FirstOrDefault(c => c.Email == model.Email) :
+                            _context.Users.FirstOrDefault(c => c.Cpf == model.Cpf);
 
 
             if (user == null)
@@ -43,11 +43,13 @@ namespace BigBurguer.Api.Controllers
                 return BadRequest(new { password = "invalid password" });
             }
 
-            return _authService.GetAuthData(user.Id, user.Name);
+            var role = _userService.GetUserRole(user.Id);
+
+            return _authService.GetAuthData(user.Id, user.Name, role);
         }
 
         [HttpPost("register")]
-        public ActionResult<AuthData> Post([FromBody]CustomerViewModel model)
+        public ActionResult<AuthData> Post([FromBody]UserViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -58,20 +60,21 @@ namespace BigBurguer.Api.Controllers
 
             var id = Guid.NewGuid().ToString();
 
-            _customerService.CreateCustomer(id, model);
+            _userService.CreateUser(id, model);
+            var role = _userService.GetUserRole(id);
 
-            return _authService.GetAuthData(id, model.Name);
+            return _authService.GetAuthData(id, model.Name, role);
         }
 
         private bool isEmailUniq(string email)
         {
-            var user = _context.Customers.FirstOrDefault(c => c.Email == email);
+            var user = _context.Users.FirstOrDefault(c => c.Email == email);
             return user == null;
         }
 
         private bool IsCpfUniq(string cpf)
         {
-            var user = _context.Customers.FirstOrDefault(c => c.Cpf == cpf);
+            var user = _context.Users.FirstOrDefault(c => c.Cpf == cpf);
             return user == null;
         }
     }

@@ -5,6 +5,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using CryptoHelper;
+using Microsoft.AspNetCore.Identity;
+using System.Linq;
 
 namespace BigBurguer.Api.Services
 {
@@ -12,12 +14,14 @@ namespace BigBurguer.Api.Services
     {
         string jwtSecret;
         int jwtLifespan;
+
         public AuthService(string jwtSecret, int jwtLifespan)
         {
             this.jwtSecret = jwtSecret;
             this.jwtLifespan = jwtLifespan;
+
         }
-        public AuthData GetAuthData(string id, string userName)
+        public AuthData GetAuthData(string id, string userName, string role)
         {
             var expirationTime = DateTime.UtcNow.AddSeconds(jwtLifespan);
 
@@ -25,7 +29,8 @@ namespace BigBurguer.Api.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, id)
+                    new Claim(ClaimTypes.Name, id),
+                    new Claim(ClaimTypes.Role, role)
                 }),
                 Expires = expirationTime,
                 SigningCredentials = new SigningCredentials(
@@ -41,7 +46,8 @@ namespace BigBurguer.Api.Services
                 Token = token,
                 TokenExpirationTime = ((DateTimeOffset)expirationTime).ToUnixTimeSeconds(),
                 Id = id,
-                UserName = userName
+                UserName = userName,
+                Role = role
             };
         }
 

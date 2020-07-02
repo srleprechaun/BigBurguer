@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using OrderStatus = BigBurguer.Api.Infrastructure.Enum.OrderStatus;
 
 namespace BigBurguer.Api.Services
@@ -35,6 +36,17 @@ namespace BigBurguer.Api.Services
                  .Include(os => os.OrderStatus)
                  .Include(p => p.PaymentMethod)
                  .Where(o => o.Id == orderId)
+                 .ToList();
+        }
+
+        public List<Order> GetByCustomerId(string customerId)
+        {
+            return _context.Orders
+                 .Include(op => op.OrderProducts)
+                 .Include(c => c.Customer)
+                 .Include(os => os.OrderStatus)
+                 .Include(p => p.PaymentMethod)
+                 .Where(o => o.CustomerId == customerId)
                  .ToList();
         }
 
@@ -71,6 +83,25 @@ namespace BigBurguer.Api.Services
                 return result;
             }
             return null;
+        }
+
+        public int ChangeStatus(int orderId)
+        {
+            var order = _context.Orders.Find(orderId);
+
+            if(order.OrderStatusId < (int)OrderStatus.Delivered)
+            {
+               order.OrderStatusId++;
+            }
+            else
+            {
+                return 0;
+            }
+
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+
+            return order.OrderStatusId;
         }
 
         public Order DeleteOrder(int orderId)

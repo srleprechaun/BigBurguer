@@ -3,8 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BigBurguer.Api.Infrastructure.Models
 {
-    public class Customer
+    public class User
     {
+        [Column(TypeName = "varchar(50)")]
         public string Id { get; set; }
         public DateTime BirthDate { get; set; }
         [Column(TypeName = "varchar(MAX)")]
