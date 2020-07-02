@@ -9,3 +9,8 @@ INSERT INTO dbo.PaymentMethod VALUES ('CreditCard');
 INSERT INTO dbo.PaymentMethod VALUES ('DebitCard');
 INSERT INTO dbo.PaymentMethod VALUES ('Cash');
 INSERT INTO dbo.PaymentMethod VALUES ('Ticket');
+
+-- INSERT ROLE 
+INSERT INTO dbo.Role VALUES ('Admin');
+INSERT INTO dbo.Role VALUES ('Customer');
+INSERT INTO dbo.Role VALUES ('Employee');

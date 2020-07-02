@@ -19,31 +19,6 @@ namespace BigBurguer.Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.Customer", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Cpf")
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("varchar(MAX)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Customers");
-                });
-
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.Ingredient", b =>
                 {
                     b.Property<int>("Id")
@@ -70,7 +45,7 @@ namespace BigBurguer.Api.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CustomerId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -198,9 +173,71 @@ namespace BigBurguer.Api.Migrations
                     b.ToTable("ProductIngredients");
                 });
 
+            modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(70)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Role");
+                });
+
+            modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Cpf")
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("varchar(MAX)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.UserRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRoles");
+                });
+
             modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.Order", b =>
                 {
-                    b.HasOne("BigBurguer.Api.Infrastructure.Models.Customer", "Customer")
+                    b.HasOne("BigBurguer.Api.Infrastructure.Models.User", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId");
 
@@ -245,6 +282,19 @@ namespace BigBurguer.Api.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BigBurguer.Api.Infrastructure.Models.UserRole", b =>
+                {
+                    b.HasOne("BigBurguer.Api.Infrastructure.Models.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BigBurguer.Api.Infrastructure.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

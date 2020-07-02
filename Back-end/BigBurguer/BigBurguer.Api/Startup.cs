@@ -119,11 +119,11 @@ namespace BigBurguer.Api
             services.AddScoped<IIngredientService, IngredientService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddTransient<IValidator<IngredientViewModel>, IngredientValidator>();
             services.AddTransient<IValidator<ProductViewModel>, ProductValidator>();
-            services.AddTransient<IValidator<CustomerViewModel>, CustomerValidator>();
+            services.AddTransient<IValidator<UserViewModel>, UserValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
