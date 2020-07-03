@@ -58,8 +58,8 @@ namespace BigBurguer.Api.Controllers
             return Ok(result);
         }
 
-        [Authorize]
         [HttpPost]
+        [Authorize(Roles = "Admin, Employee")]
         public IActionResult Create([FromBody]ProductViewModel productModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
@@ -71,8 +71,8 @@ namespace BigBurguer.Api.Controllers
             return Created($"/api/Products/{result}", null);
         }
 
-        [Authorize]
         [HttpPut("{productId:int}")]
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult<Product> Edit([FromRoute]int productId, [FromBody]ProductViewModel productModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
@@ -84,8 +84,8 @@ namespace BigBurguer.Api.Controllers
             return Ok(productId);
         }
 
-        [Authorize]
         [HttpDelete("{productId:int}")]
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult<Product> Delete([FromRoute]int productId)
         {
             var result = _productService.DeleteProduct(productId);

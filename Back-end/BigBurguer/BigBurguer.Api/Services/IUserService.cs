@@ -12,7 +12,6 @@ namespace BigBurguer.Api.Services
         public User GetId(string customerId);
         public EntityEntry<User> CreateUser(string id, UserViewModel customerModel);   
         public EntityEntry<User> EditUser(string id, UserViewModel customerModel);
-        public EntityEntry<User> DeleteUser(string customerId);
         public EntityEntry<UserRole> AddRoleToUser(string userId, Enum.Role role);
         public string GetUserRole(string userId);
     }
