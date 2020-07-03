@@ -9,7 +9,10 @@ const AUTH_KEY = "AUTHORIZATION_KEY";
 
 export default class Header extends Component {
   state = {
-      isOpen: false
+      isOpen: false,
+      logged: false,
+      loggedUser: "",
+      loggedUserRole: ""
   };
 
   componentDidMount() {
@@ -33,12 +36,22 @@ export default class Header extends Component {
         window.scrollTo(0, c - c / 8);
       }
     }
+    this.getLoggedUser();
   }
 
   toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
 
+  async getLoggedUser() {
+    var user = await this._retrieveData(AUTH_KEY);
+    var loggedUser = user ? user.userName : "Visitante";
+    var loggedUserRole = user ? user.role : "Customer";
+    var logged = user ? true : false;
+    this.setState({ loggedUser: loggedUser, logged: logged, loggedUserRole: loggedUserRole });
+  }
+
   logout = async () => {
     await this._storeData(AUTH_KEY, {});
+    window.location.reload();
   }
 
   _storeData = async (key, obj) => {
@@ -50,8 +63,22 @@ export default class Header extends Component {
     }
   }
 
+  _retrieveData = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value) {
+        return JSON.parse(value);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   render () {
     const menuClass = `dropdown-menu dropdown-menu-right${this.state.isOpen ? " show" : ""}`;
+    const logged = this.state.logged;
+    const loggedUser = this.state.loggedUser;
+    const loggedUserRole = this.state.loggedUserRole;
 
     return (
       <header>
@@ -61,6 +88,7 @@ export default class Header extends Component {
             <a className="navbar-brand d-flex align-items-center" href="/">
               <img src={logo} alt="Logotipo Big Burguer" width="100" height="59.8"></img>
             </a>
+            <h6 className="card-title text-center">Olá, {loggedUser}!</h6>
             <div className="btn-group" onClick={this.toggleOpen}>
               <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -69,10 +97,10 @@ export default class Header extends Component {
               <div className={menuClass}>
                 <a href="/carrinho" className="dropdown-item">Carrinho</a>
                 <a href="/compras" className="dropdown-item">Minhas compras</a>
-                <a href="/produto" className="dropdown-item">Cadastrar Produto</a>
-                <a href="/conta" className="dropdown-item">Meus dados</a>
-                <a className="dropdown-item" onClick={this.logout.bind(this)}>Sair</a>
-                <a href="/login" className="dropdown-item">Entrar</a>
+                <a href="/produto" className="dropdown-item" hidden={!(logged && loggedUserRole === 'Admin')}>Cadastrar Produto</a>
+                <a href="/conta" className="dropdown-item" hidden={!logged}>Meus dados</a>
+                <a className="dropdown-item" onClick={this.logout.bind(this)} hidden={!logged}>Sair</a>
+                <a href="/login" className="dropdown-item" hidden={logged}>Entrar</a>
               </div>
             </div>
           </div>

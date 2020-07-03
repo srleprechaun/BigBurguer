@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import apiBase from '../../services/base';
 
 const days = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 ];
 const months = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
@@ -51,9 +52,40 @@ export default class User extends Component {
     }
   }
 
-  handleSubmit(event) {
-    console.log(this.state);
-    event.preventDefault();
+  async handleSubmit(event) {
+    let state = this.state;
+    if (state.user.password !== state.passwordRepeat) {
+      alert('As senhas não coincidem.');
+    } else {
+      let userRequest = { birthDate: "", password: "", name: "", cpf: "", email: "" };
+      
+      userRequest.birthDate = state.user.birthday.year + "-" + state.user.birthday.month + "-" + state.user.birthday.day;
+      userRequest.password = state.user.password;
+      userRequest.name = state.user.name;
+      userRequest.cpf = state.user.cpf;
+      userRequest.email = state.user.email;
+
+      console.log(userRequest);
+
+      const response = await apiBase.post('/Auth/register', userRequest)
+      .catch(function (error) {
+        if (error.response) {
+          if (error.response.status === 401) {
+            alert('Você não possui autorização para esta ação.');
+          }
+          else {
+            alert('Ocorreu um erro ao cadastrar o usuario.');
+          }
+        }
+      });
+
+      if (response) {
+        alert('Usuário Cadastrado com Sucesso');
+        window.location = "http://localhost:3000/login";
+      }
+
+      event.preventDefault();
+    }
   }
 
   render () {
@@ -124,7 +156,7 @@ export default class User extends Component {
               </div>
 
               <br />
-              <input id="btnSubmit" type="submit" className="btn btn-primary" value="Cadastrar" onClick={this.handleSubmit.bind(this)} />
+              <input id="btnSubmit" type="button" className="btn btn-primary" value="Cadastrar" onClick={this.handleSubmit.bind(this)} />
             </form>
           </div>
         </div>

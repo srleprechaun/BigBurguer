@@ -10,9 +10,10 @@ export default class Cart extends Component {
   state = {
     products: [],
     formsOfPayment: [
-      { id: "1", name: "Dinheiro" },
-      { id: "2", name: "Cartão de Crédito" },
-      { id: "3", name: "Cartão de Débito" }
+      { id: "1", name: "Cartão de Crédito" },
+      { id: "2", name: "Cartão de Débito" },
+      { id: "3", name: "Dinheiro" },
+      { id: "4", name: "Vale Refeição" }
     ],
     selectedFormOfPayment: "",
     total: 0,
@@ -42,8 +43,7 @@ export default class Cart extends Component {
 
     products.forEach(p => cart.products.push({ productId: p.id, quantity: p.selected, price: p.price, discount: 0 }));
     cart.paymentMethodId = +selectedFormOfPayment;
-    let current_datetime = new Date();
-    cart.orderDate = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + "T" + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds();
+    cart.orderDate = new Date().toISOString();
     const config = { headers: { 'Authorization': 'Bearer ' + customer.token } };
 
     const response = await apiBase.post('/Order', cart, config)
@@ -63,7 +63,7 @@ export default class Cart extends Component {
       this._storeData(PAYMENT_CART_KEY, { id: "" });
       this.getSelectedProducts();
       this.setSelectedFormOfPayment();
-      // window.location = "http://localhost:3000/compras";
+      window.location = "http://localhost:3000/compras";
     }
   }
 

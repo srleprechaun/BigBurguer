@@ -50,6 +50,10 @@ export default class Login extends Component {
     }
   }
 
+  register() {
+    window.location = "http://localhost:3000/conta"
+  }
+
   _storeData = async (key, obj) => {
     try {
       let value = JSON.stringify(obj);
@@ -63,19 +67,23 @@ export default class Login extends Component {
     return (
       <div role="main">
         <div className="container">
-          <div id="login" >
-            <h1>Login</h1>
-            <form>
-              <div>
-                <label>CPF ou E-mail:</label>
-                <input id="txtLogin" type="text" className="form-control" onChange={this.handleChange.bind(this)} ></input>
-              </div>
-              <div>
-                <label>Senha:</label>
-                <input id="txtPassword" type="password" className="form-control" onChange={this.handleChange.bind(this)} ></input>
-              </div>
-              <input id="btnSubmit" type="button" value="Logar" className="btn btn-primary" onClick={this.handleSubmit.bind(this)}></input>
-            </form>
+          <div class="mx-auto col-10 col-sm-5 col-md-5 col-lg-3">
+            <div id="login" >
+              <h1>Login</h1>
+              <form>
+                <div>
+                  <label>CPF ou E-mail:</label>
+                  <input id="txtLogin" type="text" className="form-control" onChange={this.handleChange.bind(this)} ></input>
+                </div>
+                <div>
+                  <label>Senha:</label>
+                  <input id="txtPassword" type="password" className="form-control" onChange={this.handleChange.bind(this)} ></input>
+                </div>
+                <input id="btnSubmit" type="button" value="Logar" className="btn btn-primary btn-sm btn-block" onClick={this.handleSubmit.bind(this)}></input>
+                <h6 className="card-title text-center">ou</h6>
+                <input id="btnSubmit" type="button" value="Cadastre-se" className="btn btn-outline-primary btn-sm btn-block" onClick={this.register}></input>
+              </form>
+            </div>
           </div>
         </div>
       </div>
