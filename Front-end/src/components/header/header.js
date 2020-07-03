@@ -114,7 +114,7 @@ export default class Header extends Component {
               </button>
               <div className={menuClass}>
                 <a href="/carrinho" className="dropdown-item">Carrinho</a>
-                <a href="/compras" className="dropdown-item">Minhas compras</a>
+                <a href="/compras" className="dropdown-item">{(logged && loggedUserRole === 'Admin') ? "Vendas" :  "Minhas Compras"}</a>
                 <a href="/produto" className="dropdown-item" hidden={!(logged && loggedUserRole === 'Admin')}>Cadastrar Produto</a>
                 <a href="/conta" className="dropdown-item" hidden={!logged}>Meus dados</a>
                 <a className="dropdown-item" onClick={this.logout.bind(this)} hidden={!logged}>Sair</a>
