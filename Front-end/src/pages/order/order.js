@@ -16,6 +16,7 @@ export default class Order extends Component {
   state = {
     orders: [],
     latestOrder: 0,
+    latestStatus: 0,
     changeStatus: false
   }
 
@@ -77,7 +78,7 @@ export default class Order extends Component {
 
       if (orders.length > 0) {
         orders.sort(function(a, b){return b.id-a.id});
-        this.setState({ orders: orders, latestOrder: orders[0].id });
+        this.setState({ orders: orders, latestOrder: orders[0].id, latestStatus: orders[0].status });
       }
     }
   }
@@ -130,6 +131,7 @@ export default class Order extends Component {
   render() {
     const { orders } = this.state;
     const latestOrder = this.state.latestOrder;
+    const latestStatus = this.state.latestStatus;
     const changeStatus = this.state.changeStatus;
 
     return (
@@ -143,8 +145,9 @@ export default class Order extends Component {
         <div className="container">
           <div className="mx-auto col-10 col-sm-5 col-md-5 col-lg-3">
             <div className="div-senha">
-              <span className="senha">{latestOrder}</span>
               <span className="label-senha">Senha atual.</span>
+              <span className="senha">{latestOrder}</span>
+              <span className="label-senha">Status: {latestStatus}</span>
             </div>
           </div>
           <br />

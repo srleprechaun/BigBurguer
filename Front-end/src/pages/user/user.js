@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { AsyncStorage } from 'AsyncStorage';
 import apiBase from '../../services/base';
+
+const AUTH_KEY = "AUTHORIZATION_KEY";
 
 const days = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 ];
 const months = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
@@ -17,7 +20,28 @@ export default class User extends Component {
       },
       email: ""
     },
-    passwordRepeat: ""
+    passwordRepeat: "",
+    isUpdate: false
+  }
+
+  componentDidMount() {
+    this.verifyLoggedUser();
+  }
+
+  async verifyLoggedUser() {
+    const auth = await this._retrieveData(AUTH_KEY);
+    if (auth && auth.token) {
+      let config = { headers: { 'Authorization': 'Bearer ' + auth.token } };
+      let user = await apiBase.get('/Users/' + auth.id, config);
+      if (user.data) {
+        let userData = { name: user.data.name, cpf: user.data.cpf, email: user.data.email, password: "", birthday: { day: 0, month: 0, year: "" } };
+        let birthday = new Date(user.data.birthDate);
+        userData.birthday.day = birthday.getDate();
+        userData.birthday.month = birthday.getMonth() + 1;
+        userData.birthday.year = birthday.getFullYear();
+        this.setState({ user: userData, isUpdate: true });
+      }
+    }
   }
 
   handleChange(event) {
@@ -54,12 +78,17 @@ export default class User extends Component {
 
   async handleSubmit(event) {
     let state = this.state;
-    if (state.user.password !== state.passwordRepeat) {
+    if (state.user.password !== state.passwordRepeat || state.user.password === "") {
       alert('As senhas não coincidem.');
     } else {
       let userRequest = { birthDate: "", password: "", name: "", cpf: "", email: "" };
       
-      userRequest.birthDate = state.user.birthday.year + "-" + state.user.birthday.month + "-" + state.user.birthday.day;
+      let date = new Date();
+      date.setDate(state.user.birthday.day);
+      date.setMonth(state.user.birthday.month - 1);
+      date.setFullYear(state.user.birthday.year);
+
+      userRequest.birthDate = date.toISOString();
       userRequest.password = state.user.password;
       userRequest.name = state.user.name;
       userRequest.cpf = state.user.cpf;
@@ -67,26 +96,60 @@ export default class User extends Component {
 
       console.log(userRequest);
 
-      const response = await apiBase.post('/Auth/register', userRequest)
-      .catch(function (error) {
-        if (error.response) {
-          if (error.response.status === 401) {
-            alert('Você não possui autorização para esta ação.');
+      const auth = await this._retrieveData(AUTH_KEY);
+      let isUpdate = auth && auth.token;
+      let response = null;
+      if (!isUpdate) {
+        response = await apiBase.post('/Auth/register', userRequest)
+        .catch(function (error) {
+          if (error.response) {
+            if (error.response.status === 401) {
+              alert('Você não possui autorização para esta ação.');
+            }
+            else {
+              alert('Ocorreu um erro ao cadastrar o usuario.');
+            }
           }
-          else {
-            alert('Ocorreu um erro ao cadastrar o usuario.');
+        });
+      } else {
+        let config = { headers: { 'Authorization': 'Bearer ' + auth.token } };
+        response = await apiBase.put('/Users/' + auth.id, userRequest, config)
+        .catch(function (error) {
+          if (error.response) {
+            if (error.response.status === 401) {
+              alert('Você não possui autorização para esta ação.');
+            }
+            else {
+              alert('Ocorreu um erro ao cadastrar o usuario.');
+            }
           }
-        }
-      });
+        });
+      }
+      
 
-      if (response) {
+      if (response && !isUpdate) {
         alert('Usuário Cadastrado com Sucesso');
         window.location = "http://localhost:3000/login";
+      } else if (response && isUpdate) {
+        alert('Usuário Alterado com Sucesso');
+        window.location.reload();
       }
 
       event.preventDefault();
     }
   }
+
+  _retrieveData = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value) {
+        return JSON.parse(value);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   render () {
     return (
@@ -99,7 +162,6 @@ export default class User extends Component {
         </section>
         <div className="container">
           <div id='cadastroUsuario'>
-            <h1>Cadastro de Usuario</h1>
             <form>
               <div className="row">
                 <div className="col-md-6">
@@ -134,12 +196,12 @@ export default class User extends Component {
               <div className="row">
                 <div className="col-md-6">
                   <label id="lblBirthday">Data de Nascimento:</label><br/>
-                  <select id="slcDay" className="custom-select my-1 mr-sm-2" onChange={this.handleChange.bind(this)}>
+                  <select id="slcDay" className="custom-select my-1 mr-sm-2" value={this.state.user.birthday.day} onChange={this.handleChange.bind(this)}>
                     <option value="" defaultValue>Dia</option>
                     {days.map(d => <option key ={d} value={d} >{d}</option>)}
                   </select>
 
-                  <select id="slcMonth" className="custom-select my-1 mr-sm-2" onChange={this.handleChange.bind(this)}>
+                  <select id="slcMonth" className="custom-select my-1 mr-sm-2" value={this.state.user.birthday.month} onChange={this.handleChange.bind(this)}>
                     <option value="" defaultValue>Mês</option>
                     {months.map(d => <option key ={d} value={d} >{d}</option>)}
                   </select>
@@ -156,7 +218,7 @@ export default class User extends Component {
               </div>
 
               <br />
-              <input id="btnSubmit" type="button" className="btn btn-primary" value="Cadastrar" onClick={this.handleSubmit.bind(this)} />
+              <input id="btnSubmit" type="button" className="btn btn-primary" value={this.state.isUpdate ? "Alterar" : "Cadastrar"} onClick={this.handleSubmit.bind(this)} />
             </form>
           </div>
         </div>

@@ -114,7 +114,19 @@ export default class Product extends Component {
     const auth = await this._retrieveData(AUTH_KEY);
     if (auth) {
       let config = { headers: { 'Authorization': 'Bearer ' + auth.token } };
-      let userRole = await apiBase.get('/Users/' + auth.id +'/role', config);
+      let userRole = await apiBase.get('/Users/' + auth.id +'/role', config)
+      .catch(function (error) {
+        if (error.response) {
+          if (error.response.status === 401) {
+            alert('Você não possui autorização para esta ação.');
+            window.location = "http://localhost:3000";
+          }
+          else {
+            alert('Ocorreu um erro ao acessar a página.');
+            window.location = "http://localhost:3000";
+          }
+        }
+      });
       if (!(userRole.data === 'Admin' || userRole.data === 'Employee')){
         alert('Você não possui autorização para acessar essa página.');
         window.location = "http://localhost:3000";

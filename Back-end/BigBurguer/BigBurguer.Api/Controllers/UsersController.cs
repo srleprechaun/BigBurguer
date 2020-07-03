@@ -35,7 +35,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpGet("{userId}")]
-        [Authorize(Roles = "Admin, Employee")]
+        [Authorize]
         public ActionResult<User> Details([FromRoute]string userId)
         {
             var result = _userService.GetId(userId);
@@ -63,7 +63,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpPut("{userId}")]
-        [Authorize(Roles = "Admin, Employee")]
+        [Authorize]
         public IActionResult Edit([FromRoute]string userId, [FromBody]UserViewModel userModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }

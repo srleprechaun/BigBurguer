@@ -5,6 +5,7 @@ import cartLogo from '../../assets/img/logos/cart-icon.png';
 import apiBase from '../../services/base';
 
 import './style.css';
+import api from '../../services/base';
 
 const PRODUCTS_CART_KEY = "PRODUCTS_CART_KEY";
 
@@ -87,6 +88,22 @@ export default class Home extends Component {
     }
   }
 
+  async loadIngredients(id) {
+    let { products } = this.state;
+    let product = products.find(p => p.id === id);
+    if (product && product.ingredients.length <= 0){
+      const response = await apiBase.get('Products/' + id + '/Ingredients');
+      if (response.data) {
+        if (product) {
+          response.data.productIngredients.forEach(i => {
+            product.ingredients.push(i.ingredientName);
+          });
+          this.setState({ products: products });
+        }
+      }
+    }
+  }
+
   _storeData = async (key, obj) => {
     try {
       let value = JSON.stringify(obj);
@@ -135,7 +152,8 @@ export default class Home extends Component {
                       <p className="card-text">{product.name}</p>
                       <p className="card-text">R$ {product.price}</p>
                       <p>
-                      <button className="btn btn-primary" type="button" data-toggle="collapse" data-target={"#collapseExample" + product.id} aria-expanded="false" aria-controls="collapseExample">
+                      <button className="btn btn-primary" type="button" data-toggle="collapse" data-target={"#collapseExample" + product.id} aria-expanded="false" aria-controls="collapseExample"
+                        onClick={(e) => this.loadIngredients(product.id)}>
                         Ingredientes
                       </button>
                     </p>
