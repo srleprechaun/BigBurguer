@@ -26,13 +26,15 @@ export default class Order extends Component {
 
   async setUserPageType() {
     var loggedUser = await this._retrieveData(AUTH_KEY);
-    if (!loggedUser) {
+    if (!loggedUser.token) {
       alert('Você precisa estar logado para acessar essa página.');
       window.location = 'http://localhost:3000/login';
     } else {
-      if (loggedUser.role === 'Customer')
+      let config = { headers: { 'Authorization': 'Bearer ' + loggedUser.token } };
+      let userRole = await apiBase.get('/Users/' + loggedUser.id +'/role', config);
+      if (userRole.data === 'Customer')
         this.getOrders(loggedUser.id);
-      else if (loggedUser.role === 'Admin' || loggedUser === 'Employee'){
+      else if (userRole.data === 'Admin' || userRole.data === 'Employee'){
         this.setState({ changeStatus: true });
         this.getOrders(null);
       }

@@ -19,7 +19,6 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public ActionResult<IEnumerable<Ingredient>> GetAll()
         {
              try

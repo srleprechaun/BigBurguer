@@ -43,9 +43,9 @@ export default class Header extends Component {
 
   async getLoggedUser() {
     var user = await this._retrieveData(AUTH_KEY);
-    var loggedUser = user ? user.userName : "Visitante";
-    var loggedUserRole = user ? user.role : "Customer";
-    var logged = user ? true : false;
+    var loggedUser = user.userName ? user.userName : "Visitante";
+    var loggedUserRole = user.role ? user.role : "Customer";
+    var logged = user.userName ? true : false;
     this.setState({ loggedUser: loggedUser, logged: logged, loggedUserRole: loggedUserRole });
   }
 

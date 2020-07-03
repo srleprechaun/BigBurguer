@@ -30,6 +30,7 @@ export default class Product extends Component {
   };
 
   componentDidMount() {
+    this.verifyLoggedUser();
     this.updateIngredients();
   }
 
@@ -106,6 +107,18 @@ export default class Product extends Component {
     }
     else {
       return null;
+    }
+  }
+
+  async verifyLoggedUser() {
+    const auth = await this._retrieveData(AUTH_KEY);
+    if (auth) {
+      let config = { headers: { 'Authorization': 'Bearer ' + auth.token } };
+      let userRole = await apiBase.get('/Users/' + auth.id +'/role', config);
+      if (!(userRole.data === 'Admin' || userRole.data === 'Employee')){
+        alert('Você não possui autorização para acessar essa página.');
+        window.location = "http://localhost:3000";
+      }
     }
   }
 

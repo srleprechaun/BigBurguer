@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { AsyncStorage } from 'AsyncStorage';
 
 import apiBase from '../../../services/base';
+
+const AUTH_KEY = "AUTHORIZATION_KEY";
 
 export default class Ingredient extends Component {
   state = {
@@ -15,7 +18,8 @@ export default class Ingredient extends Component {
   }
 
   async saveIngredient() {
-    await apiBase.post('/Ingredients', {name: this.state.ingredient.name, quantity: +this.state.ingredient.quantity } );
+    const config = await this.getAuthorization();
+    await apiBase.post('/Ingredients', {name: this.state.ingredient.name, quantity: +this.state.ingredient.quantity }, config );
     this.props.updateIngredients();
   }
 
@@ -30,6 +34,27 @@ export default class Ingredient extends Component {
     
       default:
         break;
+    }
+  }
+
+  getAuthorization = async () => {
+    const auth = await this._retrieveData(AUTH_KEY);
+    if (auth) {
+      return { headers: { 'Authorization': 'Bearer ' + auth.token } };
+    }
+    else {
+      return null;
+    }
+  }
+
+  _retrieveData = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value) {
+        return JSON.parse(value);
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
