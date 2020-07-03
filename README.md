@@ -1,5 +1,5 @@
 ## Web Project using ReactJS and .NET - include Entity Framework Core
-## Running Big Burguer in Dev (and Debug) - Running dev/debug
+### Running Big Burguer in Dev (and Debug) - Running dev/debug
 - Start the development server for the web project
     - cd Front-end/
     - run `npm install` to install all dependecies
