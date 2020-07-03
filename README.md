@@ -14,7 +14,7 @@
     - Make the BigBurguer.Api project the Startup Project
         - right click on the project and select `Set as Startup Project`
     - Press `F5`
-        - This will open a browser tab to [http://localhost:5100/](http://localhost:5100/).
+        - This will open a browser tab to [http://localhost:5100/](http://localhost:5100/)
     - Now, this api will be used as you are making changes and navigating the Big Burguer web project.
         - Set debugger breakpoints in Visual Studio to debug the wep api.
 
