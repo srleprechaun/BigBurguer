@@ -75,7 +75,7 @@ namespace BigBurguer.Api.Services
                 user.Name = userModel.Name;
                 user.BirthDate = userModel.BirthDate;
                 user.Cpf = userModel.Cpf;
-                user.Password = userModel.Password;
+                user.Password = _authService.HashPassword(userModel.Password);
                 user.Email = userModel.Email;
 
                 var result = _context.Users.Update(user);
@@ -83,21 +83,6 @@ namespace BigBurguer.Api.Services
                 _context.SaveChanges();
                 return result;
             }
-            return null;
-        }
-
-        public EntityEntry<User> DeleteUser(string userId)
-        {
-            var user = _context.Users.Where(i => i.Id == userId).FirstOrDefault();
-
-            if (user != null)
-            {
-                var result = _context.Users.Remove(user);
-                _context.SaveChanges();
-
-                return result;
-            }
-
             return null;
         }
 

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BigBurguer.Api.Services
 {
@@ -17,7 +18,7 @@ namespace BigBurguer.Api.Services
 
         public List<Product> GetAll()
         {
-            return _context.Products.ToList();
+            return _context.Products.Include(p => p.ProductIngredients).ToList();
         }
 
         public Product GetId(int productId)
@@ -46,6 +47,7 @@ namespace BigBurguer.Api.Services
                     ProductIngredient prodIng = new ProductIngredient();
                     prodIng.ProductId = result.Entity.Id;
                     prodIng.IngredientId = ingrId.IngredientId;
+                    prodIng.IngredientName = _context.Ingredients.Find(ingrId.IngredientId).Name;
                     prodIng.Quantity = ingrId.Quantity;
 
                     _context.ProductIngredients.Add(prodIng);
@@ -77,6 +79,7 @@ namespace BigBurguer.Api.Services
                     ProductIngredient prodIng = new ProductIngredient();
                     prodIng.ProductId = product.Id;
                     prodIng.IngredientId = ingrId.IngredientId;
+                    prodIng.IngredientName = _context.Ingredients.Find(ingrId.IngredientId).Name;
                     prodIng.Quantity = ingrId.Quantity;
 
                     _context.ProductIngredients.Update(prodIng);
