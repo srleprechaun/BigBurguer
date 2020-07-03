@@ -49,11 +49,20 @@ export default class Header extends Component {
     var logged = false;
     if (auth && auth.token) {
       let config = { headers: { 'Authorization': 'Bearer ' + auth.token } };
-      let user = await apiBase.get('/Users/' + auth.id, config);
-      let userRole = await apiBase.get('/Users/' + auth.id + '/role', config);
-      loggedUser = user.data && user.data.name ? user.data.name : "Visitante";
-      loggedUserRole = userRole && userRole.data ? userRole.data : "Customer";
-      logged = user ? true : false;
+      let self = this;
+      let user = await apiBase.get('/Users/' + auth.id, config)
+      .catch(async function (error) {
+        if (error.response) {
+          await self._storeData(AUTH_KEY, {});
+          window.location.reload();
+        }
+      });;
+      if (user) {
+        let userRole = await apiBase.get('/Users/' + auth.id + '/role', config);
+        loggedUser = user.data && user.data.name ? user.data.name : "Visitante";
+        loggedUserRole = userRole && userRole.data ? userRole.data : "Customer";
+        logged = user ? true : false;
+      }
     }
     this.setState({ loggedUser: loggedUser, logged: logged, loggedUserRole: loggedUserRole });
   }
