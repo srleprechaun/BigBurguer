@@ -81,7 +81,7 @@ export default class Home extends Component {
       let products = this.state.products;
       cartProducts.forEach(p => {
         let product = products.find(x => x.id === p.id);
-        product.selected = p.selected;
+        if (product) product.selected = p.selected;
       });
       this.setState({ products: products });
     }
