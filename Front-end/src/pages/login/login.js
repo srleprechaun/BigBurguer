@@ -67,7 +67,7 @@ export default class Login extends Component {
     return (
       <div role="main">
         <div className="container">
-          <div class="mx-auto col-10 col-sm-5 col-md-5 col-lg-3">
+          <div className="mx-auto col-10 col-sm-5 col-md-5 col-lg-3">
             <div id="login" >
               <h1>Login</h1>
               <form>
@@ -81,7 +81,7 @@ export default class Login extends Component {
                 </div>
                 <input id="btnSubmit" type="button" value="Logar" className="btn btn-primary btn-sm btn-block" onClick={this.handleSubmit.bind(this)}></input>
                 <h6 className="card-title text-center">ou</h6>
-                <input id="btnSubmit" type="button" value="Cadastre-se" className="btn btn-outline-primary btn-sm btn-block" onClick={this.register}></input>
+                <input id="btnRegister" type="button" value="Cadastre-se" className="btn btn-outline-primary btn-sm btn-block" onClick={this.register}></input>
               </form>
             </div>
           </div>

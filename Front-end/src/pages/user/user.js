@@ -20,7 +20,8 @@ export default class User extends Component {
       },
       email: ""
     },
-    passwordRepeat: ""
+    passwordRepeat: "",
+    isUpdate: false
   }
 
   componentDidMount() {
@@ -38,7 +39,7 @@ export default class User extends Component {
         userData.birthday.day = birthday.getDate();
         userData.birthday.month = birthday.getMonth() + 1;
         userData.birthday.year = birthday.getFullYear();
-        this.setState({ user: userData });
+        this.setState({ user: userData, isUpdate: true });
       }
     }
   }
@@ -77,12 +78,17 @@ export default class User extends Component {
 
   async handleSubmit(event) {
     let state = this.state;
-    if (state.user.password !== state.passwordRepeat) {
+    if (state.user.password !== state.passwordRepeat || state.user.password === "") {
       alert('As senhas não coincidem.');
     } else {
       let userRequest = { birthDate: "", password: "", name: "", cpf: "", email: "" };
       
-      userRequest.birthDate = state.user.birthday.year + "-" + state.user.birthday.month + "-" + state.user.birthday.day;
+      let date = new Date();
+      date.setDate(state.user.birthday.day);
+      date.setMonth(state.user.birthday.month - 1);
+      date.setFullYear(state.user.birthday.year);
+
+      userRequest.birthDate = date.toISOString();
       userRequest.password = state.user.password;
       userRequest.name = state.user.name;
       userRequest.cpf = state.user.cpf;
@@ -121,9 +127,12 @@ export default class User extends Component {
       }
       
 
-      if (response) {
+      if (response && !isUpdate) {
         alert('Usuário Cadastrado com Sucesso');
         window.location = "http://localhost:3000/login";
+      } else if (response && isUpdate) {
+        alert('Usuário Alterado com Sucesso');
+        window.location.reload();
       }
 
       event.preventDefault();
@@ -153,7 +162,6 @@ export default class User extends Component {
         </section>
         <div className="container">
           <div id='cadastroUsuario'>
-            <h1>Cadastro de Usuario</h1>
             <form>
               <div className="row">
                 <div className="col-md-6">
@@ -210,7 +218,7 @@ export default class User extends Component {
               </div>
 
               <br />
-              <input id="btnSubmit" type="button" className="btn btn-primary" value="Cadastrar" onClick={this.handleSubmit.bind(this)} />
+              <input id="btnSubmit" type="button" className="btn btn-primary" value={this.state.isUpdate ? "Alterar" : "Cadastrar"} onClick={this.handleSubmit.bind(this)} />
             </form>
           </div>
         </div>

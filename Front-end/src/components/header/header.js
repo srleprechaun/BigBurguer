@@ -43,11 +43,18 @@ export default class Header extends Component {
   toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
 
   async getLoggedUser() {
-    var user = await this._retrieveData(AUTH_KEY);
-    // var user = await 
-    var loggedUser = user && user.userName ? user.userName : "Visitante";
-    var loggedUserRole = user && user.role ? user.role : "Customer";
-    var logged = user && user.userName ? true : false;
+    var auth = await this._retrieveData(AUTH_KEY);
+    var loggedUser = "Visitante";
+    var loggedUserRole = "Customer";
+    var logged = false;
+    if (auth && auth.token) {
+      let config = { headers: { 'Authorization': 'Bearer ' + auth.token } };
+      let user = await apiBase.get('/Users/' + auth.id, config);
+      let userRole = await apiBase.get('/Users/' + auth.id + '/role', config);
+      loggedUser = user.data && user.data.name ? user.data.name : "Visitante";
+      loggedUserRole = userRole && userRole.data ? userRole.data : "Customer";
+      logged = user ? true : false;
+    }
     this.setState({ loggedUser: loggedUser, logged: logged, loggedUserRole: loggedUserRole });
   }
 
