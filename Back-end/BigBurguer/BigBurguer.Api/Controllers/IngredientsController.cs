@@ -19,6 +19,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult<IEnumerable<Ingredient>> GetAll()
         {
              try
@@ -34,6 +35,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Employee")]
         public IActionResult Post([FromBody]IngredientViewModel ingredientModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
@@ -46,6 +48,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpGet("{ingredientId:int}")]
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult<Ingredient> Get([FromRoute]int ingredientId)
         {
             var result = _ingredientService.GetId(ingredientId);
@@ -59,6 +62,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpPut("{ingredientId:int}")]
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult<Ingredient> Put([FromRoute]int ingredientId, [FromBody]IngredientViewModel ingredientModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
@@ -71,6 +75,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpDelete("{ingredientId:int}")]
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult<Ingredient> Delete([FromRoute]int ingredientId)
         {
             var result = _ingredientService.DeleteIngredient(ingredientId);

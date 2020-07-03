@@ -20,6 +20,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult<IEnumerable<Order>> GetAll()
         {
              try
@@ -36,6 +37,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpGet("{orderId:int}")]
+        [Authorize]
         public ActionResult<IEnumerable<Order>> Details([FromRoute]int orderId)
         {
             var result = _orderService.GetOrderById(orderId);
@@ -49,6 +51,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpGet("{userId}")]
+        [Authorize]
         public ActionResult<IEnumerable<Order>> GetByCustomer([FromRoute]string userId)
         {
             var result = _orderService.GetByCustomerId(userId);
@@ -62,6 +65,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Post([FromBody]OrderViewModel orderViewModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
@@ -74,7 +78,8 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpPut("{orderId:int}/OrderStatus")]
-        public IActionResult Post([FromRoute]int orderId)
+        [Authorize(Roles = "Admin, Employee")]
+        public IActionResult ChangeOrderStatus([FromRoute]int orderId)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
             var result = _orderService.ChangeStatus(orderId);
@@ -86,6 +91,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpDelete("{orderId:int}")]
+        [Authorize]
         public IActionResult Delete([FromRoute]int orderId)
         {
             var result = _orderService.DeleteOrder(orderId);
@@ -97,6 +103,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpDelete("{orderId:int}/OrderProduct/{orderProdId:int}")]
+        [Authorize]
         public IActionResult DeleteOrderProduct([FromRoute]int orderId, [FromRoute]int orderProdId)
         {
             var result = _orderService.DeleteOrderProduct(orderId, orderProdId);

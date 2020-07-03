@@ -20,6 +20,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult<List<User>> Index()
         {
             try
@@ -34,6 +35,7 @@ namespace BigBurguer.Api.Controllers
         }
 
         [HttpGet("{userId}")]
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult<User> Details([FromRoute]string userId)
         {
             var result = _userService.GetId(userId);
@@ -46,7 +48,22 @@ namespace BigBurguer.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{userId}/role")]
+        [Authorize]
+        public ActionResult<string> UserRole([FromRoute]string userId)
+        {
+            var result = _userService.GetUserRole(userId);
+
+            if (result == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(result);
+        }
+
         [HttpPut("{userId}")]
+        [Authorize(Roles = "Admin, Employee")]
         public IActionResult Edit([FromRoute]string userId, [FromBody]UserViewModel userModel)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
@@ -69,17 +86,6 @@ namespace BigBurguer.Api.Controllers
                 return BadRequest(ModelState);
             }
             return StatusCode(200);
-        }
-
-        [HttpDelete("{userId}")]
-        public IActionResult Delete([FromRoute]string userId)
-        {
-            var result = _userService.DeleteUser(userId);
-            if (result == null)
-            {
-                return BadRequest();
-            }
-            return StatusCode(204);
         }
     }
 }

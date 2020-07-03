@@ -8,6 +8,7 @@ namespace BigBurguer.Api.Infrastructure.Models
         [JsonIgnore]
         public int ProductId { get; set; }
         public int IngredientId { get; set; }
+        public string IngredientName { get; set; }
         public int Quantity { get; set; }
 
         [JsonIgnore]
