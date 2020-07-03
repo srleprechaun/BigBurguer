@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { AsyncStorage } from 'AsyncStorage';
 import logo from '../../assets/img/logos/logo.png';
+import apiBase from '../../services/base';
 import './style.css'
 
 import $ from 'jquery';
@@ -43,9 +44,10 @@ export default class Header extends Component {
 
   async getLoggedUser() {
     var user = await this._retrieveData(AUTH_KEY);
-    var loggedUser = user.userName ? user.userName : "Visitante";
-    var loggedUserRole = user.role ? user.role : "Customer";
-    var logged = user.userName ? true : false;
+    // var user = await 
+    var loggedUser = user && user.userName ? user.userName : "Visitante";
+    var loggedUserRole = user && user.role ? user.role : "Customer";
+    var logged = user && user.userName ? true : false;
     this.setState({ loggedUser: loggedUser, logged: logged, loggedUserRole: loggedUserRole });
   }
 
